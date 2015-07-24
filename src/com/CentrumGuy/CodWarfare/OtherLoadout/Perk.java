@@ -1,0 +1,5 @@
+package com.CentrumGuy.CodWarfare.OtherLoadout;
+	
+public enum Perk {
+	STOPPING_POWER, JUGGERNAUT, SCAVENGER, SPEED, MARATHON, SLEIGHT_OF_HAND, HARDLINE, MARTYRDOM, FLAK_JACKET, NO_PERK
+}

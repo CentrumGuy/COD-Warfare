@@ -1,0 +1,103 @@
+###########################################################
+# +-----------------------------------------------------+ #
+# |              COD-WARFARE CONFIGURATION              | #
+# +-----------------------------------------------------+ #
+###########################################################
+
+# COD-Wafare release
+# Plugin created by CentrumGuy
+
+##########################################################################################
+
+#Whether your server is based on COD-Warfare
+ServerBased: false
+
+##########################################################################################
+
+#Link to your COD resource pack.
+#Default resource pack can be found at: https\://www.dropbox.com/s/kzbbo1nqlb61kb0/%5BCOD%5D%20Default.zip?dl\=1
+#Change to (none) without the () in order to set your resource pack to nothing
+
+ResourceLink: https\://www.dropbox.com/s/kzbbo1nqlb61kb0/%5BCOD%5D%20Default.zip?dl\=1
+
+#The server resource pack is the resource pack of the server. This resource pack will be set when the player leaves COD
+#Change to (none) without the () in order to set your server resource pack to nothing
+
+serverResourceLink: none
+
+##########################################################################################
+
+#Extra countdown will be a cool extra countdown at the start of the game but will cause lag. Also this will glitch in 1.8 until further notice
+
+extraCountdown: false
+
+##########################################################################################
+
+#gameTime and lobbyTime are times set for the game and lobby.
+
+lobbyTime: 70
+gameTime: 270
+
+##########################################################################################
+
+#Try guns: Do you want your players to be able to test guns while in the lobby?
+tryGuns: true
+
+##########################################################################################
+
+#Header and Footer appear at the top and bottom of the tab menu
+Header: '&eCOD &bThis is the header'
+Footer: '&6You can change this in the config'
+
+##########################################################################################
+
+#ONEINspectate: Do you want the players to spectate the game after they die in ONEIN?
+ONEINspectate: true
+
+##########################################################################################
+
+#Clan creation cost: how much does it cost to make a clan?
+ClanCost: 700
+
+##########################################################################################
+
+#Updater: do you want this plugin to auto-update?
+Updater: true
+
+##########################################################################################
+
+#Min-Players and Max-Players: How many players are needed to start the game or how many people can the game hold. 0 for Max-Players is infinite players
+
+Min-Players: 2
+Max-Players: 0
+
+##########################################################################################
+
+#COD-Ranks are ranks for certain levels. These support color codes, ex: &bSoldier, Default color code is &2. Remove the # to set the ranks below as ranks. (Otherwise the plugin will ignore them)
+
+COD-Ranks:
+  #'1': '&2Soldier'
+  #'2': '&2Captain'
+
+##########################################################################################
+
+#Do you want to detect if players spam or curse while being in COD-Warfare?
+
+SpamDetector: false
+
+##########################################################################################
+
+#Disable Commands: Disables commands that aren't related to COD
+DisableCommands: false
+
+#################################
+
+#Cmd List: Commands that are allowed even if DisabledCommands is true. Please add /
+#You do not need to add the whole command. For example // will allow all world edit #commands
+
+CmdList:
+  - '/help'
+  - '/say'
+  - '/me'
+
+##########################################################################################

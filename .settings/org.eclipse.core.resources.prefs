@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+encoding//src/com/CentrumGuy/CodWarfare/Arena/Countdown.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Arena/CreateArena.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Arena/DeleteArena.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Arena/JoinArena.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Arena/TDMArena.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Commands/HelpCommand.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Commands/JoinCommand.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Commands/LeaveCommand.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Commands/MainCommand.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Listeners.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Main.java=UTF-8
+encoding//src/com/CentrumGuy/CodWarfare/Utilities/SendCoolMessages.java=UTF-8
