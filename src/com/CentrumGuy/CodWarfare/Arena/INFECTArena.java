@@ -29,7 +29,7 @@ public class INFECTArena {
 	private static ArrayList<Player> pls = new ArrayList<Player>();
 	public static HashMap<Player, ZombieTeam> team = new HashMap<Player, ZombieTeam>();
 	
-	private static Player firstZombie;
+	public static Player firstZombie;
 	
 	public static void assignTeam() {
 		

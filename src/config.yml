@@ -15,10 +15,10 @@ ServerBased: false
 ##########################################################################################
 
 #Link to your COD resource pack.
-#Default resource pack can be found at: https\://www.dropbox.com/s/kzbbo1nqlb61kb0/%5BCOD%5D%20Default.zip?dl\=1
+#Default resource pack can be found at: https://www.dropbox.com/s/kzbbo1nqlb61kb0/%5BCOD%5D%20Default.zip?dl=1
 #Change to (none) without the () in order to set your resource pack to nothing
 
-ResourceLink: https\://www.dropbox.com/s/kzbbo1nqlb61kb0/%5BCOD%5D%20Default.zip?dl\=1
+ResourceLink: https://www.dropbox.com/s/kzbbo1nqlb61kb0/%5BCOD%5D%20Default.zip?dl=1
 
 #The server resource pack is the resource pack of the server. This resource pack will be set when the player leaves COD
 #Change to (none) without the () in order to set your server resource pack to nothing
@@ -101,3 +101,43 @@ CmdList:
   - '/me'
 
 ##########################################################################################
+
+#ExoJump: Do you want ExoJumps to be added to people with the cod.exojump permission?
+ExoJump: true
+
+##########################################################################################
+
+#FireworksOnDeath: Do you want a firework to spawn on player death?
+FireworksOnDeath: true
+
+##########################################################################################
+
+#GamemodePrefix: This will automatically add a prefix of the gamemode to every arena made.
+#for example Bayview_INF
+
+PrefixGamemode: false
+
+##########################################################################################
+
+#Support for MySQL
+
+MySQL:
+  Enabled: false
+  Username: Username
+  Password: Password
+  Ip: 0.0.0.0
+  Database: Database
+    
+##########################################################################################
+
+#Perks: Set perk costs here
+
+Perks:
+  Cost:
+    SPEED: 500
+    MARATHON: 450
+    SCAVENGER: 700
+    HARDLINE: 300
+
+##########################################################################################
+Version: 2.8

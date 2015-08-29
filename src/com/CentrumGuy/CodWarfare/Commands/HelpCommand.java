@@ -55,6 +55,7 @@ public class HelpCommand {
 				p.sendMessage(" §8- §3/cod guncreator §7- §bEasy way to create guns");
 				p.sendMessage(" §8- §3/cod nextarena §7- §bSet the next arena in the game");
 				p.sendMessage(" §8- §3/cod start §7- §bForce start the match");
+				p.sendMessage(" §8- §3/cod authors §7- §bShows the creators of COD-Warfare");
 			}else{
 				p.sendMessage(Main.codSignature + "§cInvalid help page§4 " + args[1]);
 			}

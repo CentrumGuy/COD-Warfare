@@ -2,7 +2,7 @@ package com.CentrumGuy.CodWarfare.Files;
  
 import java.io.File;
 import java.io.IOException;
- 
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,23 +26,22 @@ public class ArenasFile {
         static File afile;
        
         public static void setup(Plugin p) {
-               
-                if (!p.getDataFolder().exists()) {
-                        p.getDataFolder().mkdir();
+            if (!p.getDataFolder().exists()) {
+                    p.getDataFolder().mkdir();
+            }
+           
+            afile = new File(p.getDataFolder(), "arenas.yml");
+           
+            if (!afile.exists()) {
+                try {
+                	afile.createNewFile();
                 }
-               
-                afile = new File(p.getDataFolder(), "arenas.yml");
-               
-                if (!afile.exists()) {
-                        try {
-                                afile.createNewFile();
-                        }
-                        catch (IOException e) {
-                                Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create arenas.yml!");
-                        }
+                catch (IOException e) {
+                	Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create arenas.yml!");
                 }
-               
-                arenas = YamlConfiguration.loadConfiguration(afile);
+            }
+           
+            arenas = YamlConfiguration.loadConfiguration(afile);
         }
        
         public static FileConfiguration getData() {

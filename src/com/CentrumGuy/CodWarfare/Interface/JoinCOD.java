@@ -18,10 +18,10 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import com.CentrumGuy.CodWarfare.Listeners;
 import com.CentrumGuy.CodWarfare.Main;
+import com.CentrumGuy.CodWarfare.Achievements.AchievementsAPI;
 import com.CentrumGuy.CodWarfare.Arena.BaseArena;
 import com.CentrumGuy.CodWarfare.Arena.Countdown;
 import com.CentrumGuy.CodWarfare.Files.LobbyFile;
-import com.CentrumGuy.CodWarfare.Files.ScoresFile;
 import com.CentrumGuy.CodWarfare.Inventories.AGPInventory;
 import com.CentrumGuy.CodWarfare.Inventories.AGSInventory;
 import com.CentrumGuy.CodWarfare.Inventories.Guns;
@@ -52,7 +52,8 @@ public class JoinCOD {
 	public static HashMap<Player, Float> speed = new HashMap<Player, Float>();
 
 	@SuppressWarnings("deprecation")
-	public static void join(boolean JoinMessage, final Player p) {
+	public static void join(boolean JoinMessage, final Player p, boolean login) {
+		if (!(p.isOnline())) return;
 		
 		if (Main.WaitingPlayers.contains(p) || Main.PlayingPlayers.contains(p)) {
 			if (JoinMessage) {
@@ -157,9 +158,10 @@ public class JoinCOD {
 			Player player = p;
 			player.getInventory().clear();
 			player.getInventory().setItem(0, Main.shoptool);
-			if (Main.testGuns == true) player.getInventory().setItem(6, Main.tryGuns);
+			if (Main.testGuns == true) player.getInventory().setItem(7, Main.tryGuns);
+			player.getInventory().setItem(6, AchievementsAPI.getAchievementsItem(p));
 			player.getInventory().setHeldItemSlot(4);
-			player.closeInventory();
+			if (!(login)) player.closeInventory();
 			
 			player.updateInventory();
 			
@@ -200,7 +202,7 @@ public class JoinCOD {
 			if (JoinMessage) player.sendMessage(Main.codSignature + "§bYou joined COD-Warfare");
 			if (JoinMessage) p.sendMessage(Main.codSignature + "§dGame will begin shortly.");
 			
-			if (ScoresFile.getData().contains("Scores." + p.getUniqueId())) {
+			if (Scores.scoresExist(player)) {
 				Scores.loadScores(p);
 				float precent = (((float) Exp.ExpNow.get(p)) / ((float) Exp.NeededExpNow.get(p)));
 				p.setExp(precent);
@@ -209,8 +211,12 @@ public class JoinCOD {
 			
 			if (!(LobbyFile.getData().getConfigurationSection("Lobby") == null)) {
 				p.teleport(Lobby.getLobby());
-			}else if (player.isOp()) {
-				p.sendMessage(Main.codSignature + "§cPlease set a lobby by typing §4/cod lobby set");
+			}else{
+				p.teleport(p.getWorld().getSpawnLocation());
+				
+				if (p.isOp()) {
+					p.sendMessage(Main.codSignature + "§cPlease set a lobby by typing §4/cod lobby set");
+				}
 			}
 			
 			Listeners.MessageFromBefore.put(player, "");
@@ -229,7 +235,7 @@ public class JoinCOD {
 				Exp.setNeededExp(player, 210);
 			}
 	        
-	        p.closeInventory();
+			if (!(login)) p.closeInventory();
 	        
 			AGPInventory.getAGP(p).setItem(49, ItemsAndInventories.backAG);
 			AGSInventory.getAGS(p).setItem(49, ItemsAndInventories.backAG);

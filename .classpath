@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="/Users/shaharben-dor/Documents/Eclipse/Bukkit Imports/CrackShot.jar"/>
 	<classpathentry kind="lib" path="/Users/shaharben-dor/Documents/Eclipse/Bukkit Imports/Craftbukkit1.8.jar"/>
 	<classpathentry kind="lib" path="/Users/shaharben-dor/Documents/Eclipse/Bukkit Imports/ProtocolLib.jar"/>
+	<classpathentry kind="lib" path="/Users/shaharben-dor/Documents/Other/Survival/plugins/CODWeapons.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

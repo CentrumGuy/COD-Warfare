@@ -19,7 +19,7 @@ public class MainCommand implements CommandExecutor{
 		CommandSender player = sender;
 			if (args.length == 0) {	
 					player.sendMessage("§b§lCOD-Warfare Info:");
-					player.sendMessage(" §7- §3Plugin created by §eCentrumGuy & Mr_Rhetorical");
+					player.sendMessage(" §7- §3COD-Warfare Developers: §eCentrumGuy, Mr_Rhetorical, xx_Dev_xx, and ShadowwizardMC");
 					player.sendMessage(" §7- §3Plugin version:§b " + Main.version);
 					player.sendMessage(" §7- §3Plugin Link: §cdev.bukkit.org/bukkit-plugins/call-of-duty/");
 					player.sendMessage(" §7- §3Type §c/cod help §3to start");
@@ -59,6 +59,24 @@ public class MainCommand implements CommandExecutor{
 						}
 						
 						LeaveCommand.LeaveCOD(sender, args);
+					}else if (args[0].equalsIgnoreCase("credits") || args[0].equalsIgnoreCase("cred")) {
+						if (args.length < 2) {
+							sender.sendMessage(Main.codSignature + "§cPlease type §4/cod credits [set|add|take] [Player Name] [Amount]");
+							return true;
+						}
+						
+						if (args[1].equalsIgnoreCase("add")) {
+							CreditsCommand.addCredits(sender, args);
+						}else if (args[1].equalsIgnoreCase("take")) {
+							CreditsCommand.takeCredits(sender, args);
+						}else if (args[1].equalsIgnoreCase("set")) {
+							CreditsCommand.setCredits(sender, args);
+						}else{
+							sender.sendMessage(Main.codSignature + "§cPlease type §4/cod credits [set|add|take] [Player Name] [Amount]");
+							return true;
+						}
+					}else if (args[0].equalsIgnoreCase("authors") || args[0].equalsIgnoreCase("author")) {
+						AuthorsCommand.author(sender);
 					}else{
 						if (sender instanceof Player) {			
 							Player p = (Player) sender;
@@ -216,22 +234,6 @@ public class MainCommand implements CommandExecutor{
 						UpdateCommand.update(p, args);
 					}else if (args[0].equalsIgnoreCase("createweapon")) {
 						CreateWeaponCommand.createWeapon(args, p);
-					}else if (args[0].equalsIgnoreCase("credits") || args[0].equalsIgnoreCase("cred")) {
-						if (args.length < 2) {
-							p.sendMessage(Main.codSignature + "§cPlease type §4/cod credits [set|add|take] [Player Name] [Amount]");
-							return true;
-						}
-						
-						if (args[1].equalsIgnoreCase("add")) {
-							CreditsCommand.addCredits(p, args);
-						}else if (args[1].equalsIgnoreCase("take")) {
-							CreditsCommand.takeCredits(p, args);
-						}else if (args[1].equalsIgnoreCase("set")) {
-							CreditsCommand.setCredits(p, args);
-						}else{
-							p.sendMessage(Main.codSignature + "§cPlease type §4/cod credits [set|add|take] [Player Name] [Amount]");
-							return true;
-						}
 					}else if (args[0].equalsIgnoreCase("arenacreator") || args[0].equalsIgnoreCase("creator")) {
 						if (p.hasPermission("cod.arenacreator")) {
 							if (CreateArenaCommand.creatingArena.get(p) == true) {

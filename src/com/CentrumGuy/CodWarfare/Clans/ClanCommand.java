@@ -23,6 +23,8 @@ public class ClanCommand {
 				p.sendMessage("§7 - §e/cod clan join §7- §bJoins a clan");
 				p.sendMessage("§7 - §e/cod clan invites §7- §bShows you your clan invites");
 				p.sendMessage("§7 - §e/cod clan delete §7- §bDeletes a clan");
+				p.sendMessage("§7 - §e/cod clan addadmin §7- §bAdds an admin to the clan");
+				p.sendMessage("§7 - §e/cod clan removeadmin §7- §bRemoves and admin from the clan");
 				return;
 			}
 			
@@ -94,7 +96,7 @@ public class ClanCommand {
 					return;
 				}
 				
-				if (MainClan.isOwner(p, MainClan.getClan(p))) {
+				if (MainClan.isOwner(p, MainClan.getClan(p)) || MainClan.isAdmin(MainClan.getClan(p), p)) {
 					if (args.length < 3) {
 						p.sendMessage(Main.codSignature + "§cPlease type §4/cod clan invite [Player Name]");
 					}else{
@@ -120,7 +122,7 @@ public class ClanCommand {
 						}
 					}
 				}else{
-					p.sendMessage(Main.codSignature + "§cYou are not the clan owner");
+					p.sendMessage(Main.codSignature + "§cYou are not a clan admin");
 					return;
 				}
 			}else if (command.equalsIgnoreCase("leave") || command.equalsIgnoreCase("l")) {
@@ -141,6 +143,7 @@ public class ClanCommand {
 				
 				String clan = MainClan.getClan(p);
 				
+				MainClan.removeAdmin(p, clan);
 				MainClan.removePlayer(p, MainClan.getClan(p));
 				p.sendMessage(Main.codSignature + "§aLeft clan§2 " + clan);
 			}else if (command.equalsIgnoreCase("join") || command.equalsIgnoreCase("j")) {
@@ -215,6 +218,87 @@ public class ClanCommand {
 				for (int i = 0 ; i < MainClan.invites.get(p).size() ; i++) {
 					String clan = MainClan.invites.get(p).get(i);
 					p.sendMessage(" §7-§e " + clan);
+				}
+			}else if (command.equalsIgnoreCase("addadmin")) {
+				if (!(p.hasPermission("cod.clanAddAdmin"))) {
+					p.sendMessage(Main.codSignature + "§cYou don't have the necessary permissions");
+					return;
+				}
+				
+				if (!(MainClan.belongsToAClan(p))) {
+					p.sendMessage(Main.codSignature + "§cYou are not part of any clan");
+					return;
+				}
+				
+				if ((!(MainClan.isAdmin(MainClan.getClan(p), p))) && (!(MainClan.isOwner(p, MainClan.getClan(p))))) {
+					p.sendMessage(Main.codSignature + "§cYou must be a clan admin to preform this command");
+					return;
+				}
+				
+				if (args.length < 3) {
+					p.sendMessage(Main.codSignature + "§cPlease type §4/cod clan addadmin [Player Name]");
+				}else{
+					if (Bukkit.getPlayer(args[2]) == null) {
+						p.sendMessage(Main.codSignature + "§cCould not find player§4 " + args[2]);
+					}else{
+						Player admin = Bukkit.getPlayer(args[2]);
+						if (!(MainClan.belongsToClan(admin, MainClan.getClan(p)))) {
+							p.sendMessage(Main.codSignature + "§4" + admin.getName() + " §cis not part of your clan");
+							return;
+						}
+						
+						if ((MainClan.isAdmin(MainClan.getClan(p), admin)) || (MainClan.isOwner(admin, MainClan.getClan(p)))) {
+							p.sendMessage(Main.codSignature + "§4" + admin.getName() + " §cis already an admin of your clan");
+							return;
+						}
+						
+						MainClan.addAdmin(MainClan.getClan(p), admin);
+						admin.sendMessage(Main.codSignature + "§aYou are now an admin of clan§2 " + MainClan.getClan(admin));
+						p.sendMessage(Main.codSignature + "§2" + admin.getName() + " §ais now an admin of your clan");
+					}
+				}
+			}else if (command.equalsIgnoreCase("removeadmin")) {
+				if (!(p.hasPermission("cod.clanRemoveAdmin"))) {
+					p.sendMessage(Main.codSignature + "§cYou don't have the necessary permissions");
+					return;
+				}
+				
+				if (!(MainClan.belongsToAClan(p))) {
+					p.sendMessage(Main.codSignature + "§cYou are not part of any clan");
+					return;
+				}
+				
+				if (!(MainClan.isOwner(p, MainClan.getClan(p)))) {
+					p.sendMessage(Main.codSignature + "§cYou must be a clan owner to preform this command");
+					return;
+				}
+				
+				if (args.length < 3) {
+					p.sendMessage(Main.codSignature + "§cPlease type §4/cod clan removeadmin [Player Name]");
+				}else{
+					if (Bukkit.getPlayer(args[2]) == null) {
+						p.sendMessage(Main.codSignature + "§cCould not find player§4 " + args[3]);
+					}else{
+						Player admin = Bukkit.getPlayer(args[2]);
+						if (!(MainClan.belongsToClan(admin, MainClan.getClan(p)))) {
+							p.sendMessage(Main.codSignature + "§4" + admin.getName() + " §cis not part of your clan");
+							return;
+						}
+						
+						if (admin.equals(p)) {
+							p.sendMessage(Main.codSignature + "§cClan owners have to be clan admins");
+							return;
+						}
+						
+						if (!(MainClan.isAdmin(MainClan.getClan(p), admin))) {
+							p.sendMessage(Main.codSignature + "§4" + admin.getName() + " §cis not an admin of your clan");
+							return;
+						}
+						
+						MainClan.removeAdmin(admin, MainClan.getClan(p));
+						admin.sendMessage(Main.codSignature + "§aYou are no longer an admin of clan§2 " + MainClan.getClan(admin));
+						p.sendMessage(Main.codSignature + "§2" + admin.getName() + " §ais no longer an of your clan");
+					}
 				}
 			}else{
 				p.sendMessage(Main.codSignature + "§cInvalid clan command:§4 " + command);

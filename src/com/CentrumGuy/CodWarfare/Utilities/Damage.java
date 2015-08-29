@@ -2,12 +2,17 @@ package com.CentrumGuy.CodWarfare.Utilities;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class Damage {
 	@SuppressWarnings("deprecation")
 	public static void damage(LivingEntity damager, LivingEntity damagee, double damage) {
+		if (damager instanceof Player) {
+			Player p = (Player) damager;
+			if (!(p.isOnline())) return;
+		}
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, damagee, DamageCause.ENTITY_ATTACK, damage);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) return;

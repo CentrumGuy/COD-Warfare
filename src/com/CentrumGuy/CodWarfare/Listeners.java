@@ -3,37 +3,21 @@ package com.CentrumGuy.CodWarfare;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.CentrumGuy.CodWarfare.OtherLoadout.Perk;
-import com.CentrumGuy.CodWarfare.OtherLoadout.PerkAPI;
-import com.CentrumGuy.CodWarfare.OtherLoadout.WeaponUtils;
-import com.CentrumGuy.CodWarfare.Packets.WrapperPlayClientClientCommand;
-import com.CentrumGuy.CodWarfare.ParticleEffects.ParticleEffect;
-import com.CentrumGuy.CodWarfare.ParticleEffects.ParticleEffect.BlockData;
-import com.CentrumGuy.CodWarfare.Updater.UpdateResult;
-import com.CentrumGuy.CodWarfare.SpecialWeapons.AirStrike;
-import com.CentrumGuy.CodWarfare.SpecialWeapons.ElectroMagneticPulse;
-import com.CentrumGuy.CodWarfare.SpecialWeapons.MoreAmmo;
-import com.CentrumGuy.CodWarfare.Updater.UpdateType;
-import com.CentrumGuy.CodWarfare.Utilities.DeathBloodEffect;
-import com.CentrumGuy.CodWarfare.Utilities.GameCountdown;
-import com.CentrumGuy.CodWarfare.Utilities.IChatMessage;
-import com.CentrumGuy.CodWarfare.Utilities.PlaySounds;
-import com.CentrumGuy.CodWarfare.Utilities.Rank;
-import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
-import com.CentrumGuy.CodWarfare.Utilities.feedTask;
-import com.CentrumGuy.CodWarfare.Utilities.healTask;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -50,6 +34,7 @@ import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -61,11 +46,18 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Score;
 
+import com.CentrumGuy.CODWeapons.Weapons.C4;
+import com.CentrumGuy.CodWarfare.Updater.UpdateResult;
+import com.CentrumGuy.CodWarfare.Updater.UpdateType;
+import com.CentrumGuy.CodWarfare.Achievements.AchievementsAPI;
 import com.CentrumGuy.CodWarfare.Arena.BaseArena;
 import com.CentrumGuy.CodWarfare.Arena.CTFArena;
 import com.CentrumGuy.CodWarfare.Arena.FFAArena;
@@ -81,8 +73,6 @@ import com.CentrumGuy.CodWarfare.Arena.getArena;
 import com.CentrumGuy.CodWarfare.Clans.MainClan;
 import com.CentrumGuy.CodWarfare.Commands.CreateArenaCommand;
 import com.CentrumGuy.CodWarfare.Commands.CreateGunCommand;
-import com.CentrumGuy.CodWarfare.Commands.GiveGunCommand;
-import com.CentrumGuy.CodWarfare.Files.ScoresFile;
 import com.CentrumGuy.CodWarfare.Interface.EditLoadout;
 import com.CentrumGuy.CodWarfare.Interface.ItemsAndInventories;
 import com.CentrumGuy.CodWarfare.Interface.JoinCOD;
@@ -97,7 +87,29 @@ import com.CentrumGuy.CodWarfare.Inventories.ShopInventorySecondary;
 import com.CentrumGuy.CodWarfare.Leveling.Exp;
 import com.CentrumGuy.CodWarfare.Leveling.Level;
 import com.CentrumGuy.CodWarfare.Lobby.Lobby;
+import com.CentrumGuy.CodWarfare.OtherLoadout.Perk;
+import com.CentrumGuy.CodWarfare.OtherLoadout.PerkAPI;
+import com.CentrumGuy.CodWarfare.OtherLoadout.WeaponUtils;
+import com.CentrumGuy.CodWarfare.Packets.WrapperPlayClientClientCommand;
+import com.CentrumGuy.CodWarfare.ParticleEffects.ParticleEffect;
+import com.CentrumGuy.CodWarfare.ParticleEffects.ParticleEffect.BlockData;
 import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
+import com.CentrumGuy.CodWarfare.SpecialWeapons.AirStrike;
+import com.CentrumGuy.CodWarfare.SpecialWeapons.Dogs;
+import com.CentrumGuy.CodWarfare.SpecialWeapons.ElectroMagneticPulse;
+import com.CentrumGuy.CodWarfare.SpecialWeapons.MoreAmmo;
+import com.CentrumGuy.CodWarfare.SpecialWeapons.Nuke;
+import com.CentrumGuy.CodWarfare.Utilities.DeathBloodEffect;
+import com.CentrumGuy.CodWarfare.Utilities.GameCountdown;
+import com.CentrumGuy.CodWarfare.Utilities.IChatMessage;
+import com.CentrumGuy.CodWarfare.Utilities.PlaySounds;
+import com.CentrumGuy.CodWarfare.Utilities.Rank;
+import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
+import com.CentrumGuy.CodWarfare.Utilities.SendUpdateInfo;
+import com.CentrumGuy.CodWarfare.Utilities.damageUtils;
+import com.CentrumGuy.CodWarfare.Utilities.feedTask;
+import com.CentrumGuy.CodWarfare.Utilities.healTask;
+import com.CentrumGuy.CodWarfare.Utilities.startingMatch;
 import com.comphenix.protocol.wrappers.EnumWrappers.ClientCommand;
 
 @SuppressWarnings("deprecation")
@@ -107,11 +119,9 @@ public class Listeners implements Listener {
 	public static HashMap<Player, Player> lastDamager = new HashMap<Player, Player>();
 	public static ArrayList<Player> DontKill = new ArrayList<Player>();
 	
-	  private static double getFileVersion(String version) {
-		  version = StringUtils.remove(version, ThisPlugin.getPlugin().getName() + " v");
-		  double d = Double.parseDouble(version);
-		  return d;
-	  }
+	private static String getFileVersion(String version) {
+		return StringUtils.remove(version, ThisPlugin.getPlugin().getName() + " v");
+	}
 
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent e) {
@@ -170,7 +180,7 @@ public class Listeners implements Listener {
 			if (ThisPlugin.getPlugin().getConfig().getBoolean("ServerBased")) {
 				BukkitRunnable br = new BukkitRunnable() {
 					public void run() {
-						JoinCOD.join(true, p);
+						JoinCOD.join(true, p, true);
 					}
 				};
 				
@@ -179,7 +189,7 @@ public class Listeners implements Listener {
 			
 			Main.createGameBoard(p);
 			Main.createLobbyBoard(p);
-			if (ScoresFile.getData().contains("Scores." + p.getUniqueId())) Scores.loadScores(p);
+			if (Scores.scoresExist(p)) Scores.loadScores(p);
 			
 			lastDamager.put(p, null);
 			
@@ -189,8 +199,24 @@ public class Listeners implements Listener {
 			ItemsAndInventories.setUpPlayer(p);
 			ItemsAndInventories.setAvailableGuns(p);
 			
-			GiveGunCommand.addAllWaitlistGuns(p);
+			SendUpdateInfo.send(p);
+			
+			AchievementsAPI.setUpPlayer(p);
+			AchievementsAPI.unlockJoinAchievements(p);
+			
+			if (Exp.ExpNow.get(p) == null) {
+				Exp.ExpNow.put(p, 0);
+			}
+			
+			if (Exp.NeededExpNow.get(p) == null) {
+				Exp.NeededExpNow.put(p, 210);
+			}
+			
+			if (Exp.NeededExpFromBefore.get(p) == null) {
+				Exp.NeededExpFromBefore.put(p, 0);
+			}
 	}
+	
 	@EventHandler 
 	public void onPickupItem(PlayerPickupItemEvent e) {
 		if (e.getItem().hasMetadata("codredflag") || e.getItem().hasMetadata("codblueflag")) {
@@ -273,11 +299,56 @@ public class Listeners implements Listener {
 		KitInventory.saveKit(p);
 		Scores.saveScores(p);
 	}
+	
+	public static boolean shouldCancelInvClick(Inventory inv, Player p) {
+		if (inv.getType().equals(InventoryType.CRAFTING)) {
+			return true;
+		}else if (inv.equals(ItemsAndInventories.MainInventory)) {
+			return true;
+		}else if (inv.equals(ItemsAndInventories.ShopMainMenu.get(p))) {
+			return true;
+		}else if (inv.equals(ItemsAndInventories.ClassSelection.get(p))) {
+			return true;
+		}else if (inv.equals(ItemsAndInventories.lethals.get(p))) {
+			return true;
+		}else if (inv.equals(ItemsAndInventories.tacticals.get(p))) {
+			return true;
+		}else if (inv.equals(ItemsAndInventories.perks.get(p))) {
+			return true;
+		}else if (inv.equals(ShopInventoryPrimary.Pshop.get(p))) {
+			return true;
+		}else if (inv.equals(ShopInventorySecondary.Sshop.get(p))) {
+			return true;
+		}else if (inv.equals(AGPInventory.availablePrimaryGuns.get(p))) {
+			return true;
+		}else if (inv.equals(AGSInventory.availableSecondaryGuns.get(p))) {
+			return true;
+		}else if (inv.equals(Guns.tryGunsInventory)) {
+			return true;
+		}else if (inv.equals(Guns.tryPrimary)) {
+			return true;
+		}else if (inv.equals(Guns.trySecondary)) {
+			return true;
+		}else if (inv.equals(AchievementsAPI.achievementsInv.get(p))) {
+			return true;
+		}
+		
+		return false;
+	}
 
 	@EventHandler 
 	public void onInventoryClick(InventoryClickEvent e) {
 	if (!(e.getWhoClicked() instanceof Player)) return;
 		Player p = (Player) e.getWhoClicked();
+		
+		if (Main.PlayingPlayers.contains(p) || Main.WaitingPlayers.contains(p)) {
+			if (shouldCancelInvClick(e.getInventory(), p)) {
+				e.setCancelled(true);
+			}
+		}
+		
+		if (e.getCurrentItem() == null) return;
+		if (e.getCurrentItem().getType() == Material.AIR) return;
 		
 		if (e.getCurrentItem() != null && (e.getCurrentItem().equals(CreateArenaCommand.redSpawnTool) || e.getCurrentItem().equals(CreateArenaCommand.blueSpawnTool) || e.getCurrentItem().equals(CreateArenaCommand.redFlagTool) || e.getCurrentItem().equals(CreateArenaCommand.blueFlagTool)
 				|| e.getCurrentItem().equals(CreateArenaCommand.oneinSpecTool) || e.getCurrentItem().equals(CreateArenaCommand.ffaSpawnTool) || e.getCurrentItem().equals(CreateArenaCommand.enabledTool))) {
@@ -291,12 +362,11 @@ public class Listeners implements Listener {
 			return;
 		}
 	if (Main.WaitingPlayers.contains(p) || Main.PlayingPlayers.contains(p)) {
-		if (e.getCurrentItem() == null) return;
-		
 		if (e.getInventory().equals(ShopInventoryPrimary.getPrimaryShop(p)) || e.getInventory().equals(ShopInventorySecondary.getSecondaryShop(p))) EditLoadout.buyGun(e);
 		if (e.getInventory().equals(AGPInventory.getAGP(p)) || e.getInventory().equals(AGSInventory.getAGS(p))) EditLoadout.selectGun(e);
 		if (e.getInventory().equals(ItemsAndInventories.tacticals.get(p)) || e.getInventory().equals(ItemsAndInventories.lethals.get(p))) EditLoadout.buyWeapon(e);
 		if (e.getInventory().equals(Guns.tryGunsInventory) || e.getInventory().equals(Guns.tryPrimary) || e.getInventory().equals(Guns.trySecondary)) {
+			e.setCancelled(true);
 			Guns.getTryGun(e);
 			return;
 		}
@@ -390,7 +460,7 @@ public class Listeners implements Listener {
 		}else if (e.getCurrentItem().equals(ItemsAndInventories.exit)) {
 			e.setCancelled(true);
 			p.closeInventory();
-			Bukkit.getPlayer(p.getName()).sendMessage(Main.codSignature + "§dYou closed the gun menu");
+			Bukkit.getPlayer(p.getName()).sendMessage(Main.codSignature + "§dYou closed the menu");
 			return;
 		}else if (e.getCurrentItem().equals(ItemsAndInventories.PGun.get(p))) {
 			e.setCancelled(true);
@@ -415,8 +485,52 @@ public class Listeners implements Listener {
 		}else if (p.getGameMode().equals(GameMode.CREATIVE)) {
 			return;
 		}else{
-			e.setCancelled(true);
-			return;
+			if (e.getInventory().getType().equals(InventoryType.CRAFTING)) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(ItemsAndInventories.MainInventory)) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(ItemsAndInventories.ShopMainMenu.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(ItemsAndInventories.ClassSelection.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(ItemsAndInventories.lethals.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(ItemsAndInventories.tacticals.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(ItemsAndInventories.perks.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(ShopInventoryPrimary.Pshop.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(ShopInventorySecondary.Sshop.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(AGPInventory.availablePrimaryGuns.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(AGSInventory.availableSecondaryGuns.get(p))) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(Guns.tryGunsInventory)) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(Guns.tryPrimary)) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(Guns.trySecondary)) {
+				e.setCancelled(true);
+				return;
+			}else if (e.getInventory().equals(AchievementsAPI.achievementsInv.get(p))) {
+				e.setCancelled(true);
+				return;
+			}
 		}
 	}
 	return;
@@ -431,15 +545,18 @@ public class Listeners implements Listener {
 			}
 		}
 	}
+	
 	@EventHandler 
 	public void onPlaceBlock(BlockPlaceEvent e) {
-		Player p = e.getPlayer();
+	Player p = e.getPlayer();
 	if (Main.WaitingPlayers.contains(e.getPlayer()) || Main.PlayingPlayers.contains(e.getPlayer())) {
+		if (e.getItemInHand().getItemMeta().equals(C4.getC4Block().getItemMeta()) && (Main.weapons)) return;
 		if (!p.hasPermission("cod.terrainedit")) {
 				e.setCancelled(true);
 			}
 		}
 	}
+	
 	@EventHandler 
 	public void onEntityDeath(EntityDeathEvent e) {
 	    if (e.getEntity() instanceof Player) {
@@ -449,6 +566,7 @@ public class Listeners implements Listener {
 	    		
 	    		p.getInventory().clear();
 	    	}
+	    	
 		    if (e.getEntity().getKiller() instanceof Player) {
 		    	if (!(e.getEntity().equals(e.getEntity().getKiller()))) {
 			        Player Victim = (Player) e.getEntity();
@@ -458,7 +576,6 @@ public class Listeners implements Listener {
 			        }
 					if (Main.PlayingPlayers.contains(Victim)) {
 						if (Main.PlayingPlayers.contains(Killer)) {
-			        
 							Score KillerLobbyKills = Main.LobbyKillsScore.get(Killer.getName());
 							Score KillerGameCredits = Main.GameCreditsScore.get(Killer.getName());
 							Score KillerLobbyCredits = Main.LobbyCreditsScore.get(Killer.getName());
@@ -519,8 +636,23 @@ public class Listeners implements Listener {
 							ElectroMagneticPulse.onEntityKill(e);
 							AirStrike.onEntityKill(e);
 							MoreAmmo.onEntityKill(e);
+							Dogs.onEntitiyKill(e);
+							Nuke.onEntityKill(e);
 							
 							PerkAPI.onPlayerKillPlayer(Killer);
+							
+							AchievementsAPI.unlockMyFirstKill(Killer);
+							AchievementsAPI.unlockNoob(Victim);
+							AchievementsAPI.unlockPro(Killer);
+							AchievementsAPI.unlockMaster(Killer);
+							
+							if (startingMatch.firstBlood == null) {
+								Player firstBlood = Killer;
+								startingMatch.firstBlood = Killer;
+								
+								firstBlood.sendMessage(Main.codSignature + "§cYou got §4first blood");
+								AchievementsAPI.unlockFirstBlood(Killer);
+							}
 							
 								}
 							}
@@ -529,7 +661,7 @@ public class Listeners implements Listener {
 		    	}
 		    }
 	
-	@EventHandler (priority = EventPriority.HIGHEST) 
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 		if (e.getEntity() instanceof Player) {
 			if (e.getDamager() instanceof Player) {
@@ -587,6 +719,14 @@ public class Listeners implements Listener {
 							}
 							if (INFECTArena.Zombies.contains(damager)) {
 								e.setDamage(99999);
+								
+								if (INFECTArena.firstZombie.equals(damager)) {
+									damager.getInventory().setHelmet(new ItemStack(Material.SKULL_ITEM, 1));
+								}else{
+									damager.getInventory().setHelmet(new ItemStack(Material.SKULL_ITEM, 1, (byte) 2));
+								}
+								
+								damager.updateInventory();
 								return;
 							}
 						}else if (BaseArena.type == BaseArena.ArenaType.ONEIN) {
@@ -618,8 +758,7 @@ public class Listeners implements Listener {
 				}else{
 					return;
 				}
-			}else{
-				if (e.getDamager() instanceof Projectile) {
+			}else if (e.getDamager() instanceof Projectile) {
 					Projectile p = (Projectile) e.getDamager();
 					if (!(p.getShooter() instanceof Player)) return;
 					Player damager = (Player) p.getShooter();
@@ -691,16 +830,31 @@ public class Listeners implements Listener {
 							}
 						}
 					}
+			}else if (e.getDamager() instanceof Wolf) {
+				Wolf w = (Wolf) e.getDamager();
+				if (w.hasMetadata("codAllowHit")) {
+					if ((w.getOwner() instanceof Player) && (e.getEntity() instanceof Player)) {
+						Player p = (Player) w.getOwner();
+						Player damaged = (Player) e.getEntity();
+						if (Main.PlayingPlayers.contains(p) && Main.PlayingPlayers.contains(damaged)) {
+							e.setCancelled(true);
+							damageUtils.damage(p, damaged, 15);
+						}
+					}
 				}
 			}
 		}else{
 			if (e.getDamager() instanceof Player) {
 				Player p = (Player) e.getDamager();
-				if (Main.WaitingPlayers.contains(p) || Main.PlayingPlayers.contains(p)) e.setCancelled(true);
+				if (Main.WaitingPlayers.contains(p) || Main.PlayingPlayers.contains(p)) {
+					if (!(e.getEntity().hasMetadata("codAllowHit"))) e.setCancelled(true);
+				}
 			}else if (e.getDamager() instanceof Projectile) {
 				Projectile projectile = (Projectile) e.getDamager();
 				Player p = (Player) projectile.getShooter();
-				if (Main.WaitingPlayers.contains(p) || Main.PlayingPlayers.contains(p)) e.setCancelled(true);
+				if (Main.WaitingPlayers.contains(p) || Main.PlayingPlayers.contains(p)) {
+					if (!(e.getEntity().hasMetadata("codAllowHit"))) e.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -822,8 +976,8 @@ public class Listeners implements Listener {
 				if (TDMArena.RedTeam.contains(p)) return "§c";
 				return null;
 			}else if (getArena.getType(PickRandomArena.CurrentArena).equals("KC")) {
-				if (TDMArena.BlueTeam.contains(p)) return "§9";
-				if (TDMArena.RedTeam.contains(p)) return "§c";
+				if (KillArena.BlueTeam.contains(p)) return "§9";
+				if (KillArena.RedTeam.contains(p)) return "§c";
 				return null;
 			}else if (getArena.getType(PickRandomArena.CurrentArena).equals("CTF")) {
 				if (CTFArena.BlueTeam.contains(p)) return "§9";
@@ -854,7 +1008,7 @@ public class Listeners implements Listener {
 	}
 	
 	@EventHandler (priority = EventPriority.HIGHEST)
-	public void onSendMessage(PlayerChatEvent e) {
+	public void onSendMessage(PlayerChatEvent e) {		
 		if (CreateGunCommand.gunBuilder.get(e.getPlayer())) {
 			CreateGunCommand.onChat(e);
 			return;
@@ -1162,9 +1316,18 @@ public class Listeners implements Listener {
 			CreateGunCommand.onInteract(e);
 			return;
 		}
+		
 		if (e.getItem() != null && e.getItem().equals(ElectroMagneticPulse.EMP)) {
 			ElectroMagneticPulse.onInteract(e);
 			return;
+		}
+		
+		if (e.getItem() != null && e.getItem().equals(Dogs.Dogs)) {
+			Dogs.onInteract(e);
+		}
+		
+		if (e.getItem() != null && e.getItem().equals(Nuke.Nuke)) {
+			Nuke.onInteract(e);
 		}
 		
 		if (e.getItem() != null && e.getItem().equals(AirStrike.Airstrike)) {
@@ -1192,7 +1355,7 @@ public class Listeners implements Listener {
 				if (s.getLine(0).equalsIgnoreCase("§b§m═════════") && s.getLine(3).equalsIgnoreCase("§b§m═════════") && s.getLine(1).equalsIgnoreCase("§4§lCOD-Warfare")) {
 					if (s.getLine(2).equalsIgnoreCase("§a§lJoin")) {
 						e.setCancelled(true);
-						JoinCOD.join(true, p);
+						JoinCOD.join(true, p, false);
 					}else if (s.getLine(2).equalsIgnoreCase("§6§lLeave")) {
 						e.setCancelled(true);
 						LeaveArena.Leave(p, true, true, true);
@@ -1212,6 +1375,13 @@ public class Listeners implements Listener {
 			e.setCancelled(true);
 			p.openInventory(Guns.tryGunsInventory);
 			return;
+		}else if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR)) {
+			if (e.getItem() == null || e.getItem().getType() == Material.AIR) return;
+			if (e.getItem().hasItemMeta() && e.getItem().getItemMeta().hasDisplayName() && e.getItem().getItemMeta().getDisplayName().equals("§c§lAchievements")) {
+				e.setCancelled(true);
+				p.openInventory(AchievementsAPI.achievementsInv.get(p));
+				return;
+			}
 		}
 		
 		if (Main.WaitingPlayers.contains(e.getPlayer()) || Main.PlayingPlayers.contains(e.getPlayer())) {
@@ -1370,6 +1540,9 @@ public class Listeners implements Listener {
 					v.setCustomName("§b§lTry Guns");
 					v.setCustomNameVisible(true);
 					p.openInventory(Guns.tryGunsInventory);
+				}else{
+					e.setCancelled(true);
+					e.getPlayer().sendMessage(Main.codSignature + "§cYou may only try guns when in COD-Warfare");
 				}
 			}
 		}
@@ -1455,16 +1628,94 @@ public class Listeners implements Listener {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ThisPlugin.getPlugin(), new Runnable() {
             @Override
             public void run() {
-            if(Main.PlayingPlayers.contains(e.getPlayer())){
-                if(p.hasPermission("cod.exoboost")){
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1200, 2));
-                }else{
-                    if(Main.WaitingPlayers.contains(e.getPlayer())){
-                        p.removePotionEffect(PotionEffectType.JUMP);
-                    }
-                }
+            if(Main.PlayingPlayers.contains(p)) {
+            	if (Main.exoJump) {
+	                if(p.hasPermission("cod.exojump")) {
+	                    p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1200, 2));
+	                }else{
+	                    if(Main.WaitingPlayers.contains(e.getPlayer())) {
+	                        p.removePotionEffect(PotionEffectType.JUMP);
+	                    }
+	                }
+            	}
             }
             }
         });
     }
+    
+    @EventHandler
+	public void onDeath(PlayerDeathEvent e) {
+    	if (!(ThisPlugin.getPlugin().getConfig().getBoolean("FireworksOnDeath"))) return;
+		Player p = e.getEntity();
+		if (Main.PlayingPlayers.contains(p)) {
+			Firework f = (Firework) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), Firework.class);
+			FireworkMeta fm = f.getFireworkMeta();
+			
+			if (KillArena.RedTeam.contains(p)) {
+				fm.addEffect(FireworkEffect.builder().flicker(false)
+					.trail(true)
+					.with(FireworkEffect.Type.BALL_LARGE)
+					.withColor(Color.RED)
+					.build());
+				fm.setPower(2);
+				f.setFireworkMeta(fm);
+			}else if (KillArena.BlueTeam.contains(p)) {
+				fm.addEffect(FireworkEffect.builder().flicker(false)
+					.trail(true)
+					.with(FireworkEffect.Type.BALL_LARGE)
+					.withColor(Color.BLUE)
+					.build());
+				fm.setPower(2);
+				f.setFireworkMeta(fm);
+			}else if (CTFArena.RedTeam.contains(p)) {
+				fm.addEffect(FireworkEffect.builder().flicker(false)
+					.trail(true)
+					.with(FireworkEffect.Type.BALL_LARGE)
+					.withColor(Color.RED)
+					.build());
+				fm.setPower(2);
+				f.setFireworkMeta(fm);
+			}else if (CTFArena.BlueTeam.contains(p)) {
+				fm.addEffect(FireworkEffect.builder().flicker(false)
+					.trail(true)
+					.with(FireworkEffect.Type.BALL_LARGE)
+					.withColor(Color.BLUE)
+					.build());
+				fm.setPower(2);
+				f.setFireworkMeta(fm);
+			}else if (INFECTArena.Zombies.contains(p)) {
+				fm.addEffect(FireworkEffect.builder().flicker(false)
+					.trail(true)
+					.with(FireworkEffect.Type.BALL_LARGE)
+					.withColor(Color.RED)
+					.build());
+				fm.setPower(2);
+				f.setFireworkMeta(fm);
+			}else if (INFECTArena.Blue.contains(p)) {
+				fm.addEffect(FireworkEffect.builder().flicker(false)
+						.trail(true)
+						.with(FireworkEffect.Type.BALL_LARGE)
+						.withColor(Color.RED)
+						.build());
+				fm.setPower(2);
+				f.setFireworkMeta(fm);
+			}else if (TDMArena.RedTeam.contains(p)) {
+				fm.addEffect(FireworkEffect.builder().flicker(false)
+					.trail(true)
+					.with(FireworkEffect.Type.BALL_LARGE)
+					.withColor(Color.RED)
+					.build());
+				fm.setPower(3);
+				f.setFireworkMeta(fm);
+			}else if (TDMArena.BlueTeam.contains(p)) {
+				fm.addEffect(FireworkEffect.builder().flicker(false)
+					.trail(true)
+					.with(FireworkEffect.Type.BALL_LARGE)
+					.withColor(Color.BLUE)
+					.build());
+				fm.setPower(2);
+				f.setFireworkMeta(fm);
+			}
+		}
+	}
 }

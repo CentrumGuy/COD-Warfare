@@ -5,12 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.CentrumGuy.CodWarfare.Utilities.GetNormalName;
-import com.CentrumGuy.CodWarfare.Utilities.Prefix;
-import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
-import com.CentrumGuy.CodWarfare.Utilities.ShowPlayer;
-import com.CentrumGuy.CodWarfare.Utilities.SpawnInstantFireworks;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -36,6 +30,11 @@ import com.CentrumGuy.CodWarfare.Inventories.KitInventory;
 import com.CentrumGuy.CodWarfare.Leveling.Exp;
 import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
 import com.CentrumGuy.CodWarfare.Utilities.GameCountdown;
+import com.CentrumGuy.CodWarfare.Utilities.GetNormalName;
+import com.CentrumGuy.CodWarfare.Utilities.Prefix;
+import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
+import com.CentrumGuy.CodWarfare.Utilities.ShowPlayer;
+import com.CentrumGuy.CodWarfare.Utilities.SpawnInstantFireworks;
 
 public class CTFArena {
 	

@@ -35,8 +35,8 @@ public class CreateGunCommand {
 	public static HashMap<Player, ItemStack[]> inventory = new HashMap<Player, ItemStack[]>();
 	public static HashMap<Player, GameMode> gamemode = new HashMap<Player, GameMode>();
 	
-	public static ItemStack primary = Items.createItem(Material.STICK, 1, 0, "§3» §bClick to set gun to primary §3«");
-	public static ItemStack secondary = Items.createItem(Material.BLAZE_ROD, 1, 0, "§e» §6Click to set gun to secondary §e«");
+	public static ItemStack primary = Items.createItem(Material.WOOL, 1, 14, "§3» §bClick to set gun to primary §3«");
+	public static ItemStack secondary = Items.createItem(Material.WOOL, 1, 5, "§e» §6Click to set gun to secondary §e«");
 	public static ItemStack confirm = Items.createItem(Material.INK_SACK, 1, 10, "§2» §aClick to confirm gun creation §2«");
 	public static ItemStack abort = Items.createItem(Material.INK_SACK, 1, 5, "§4» §cAbort gun creation §4«");
 
@@ -148,7 +148,7 @@ public class CreateGunCommand {
 					gunBuilderStep.put(p, 3);
 				}else if (gunBuilderStep.get(p) == 7) {
 					e.setCancelled(true);
-					if (e.getItem().getType().equals(Material.STICK)) {
+					if ((e.getItem().getType().equals(Material.WOOL)) && (e.getItem().getData().getData() == (byte) 14)) {
 						type.put(p, "primary");
 						p.getInventory().clear();
 						p.getInventory().setItem(1, confirm);
@@ -160,7 +160,7 @@ public class CreateGunCommand {
 						
 						p.updateInventory();
 						gunBuilderStep.put(p, 8);
-					}else if (e.getItem().getType().equals(Material.BLAZE_ROD)) {
+					}else if ((e.getItem().getType().equals(Material.WOOL)) && (e.getItem().getData().getData() == (byte) 5)) {
 						type.put(p, "secondary");
 						p.getInventory().clear();
 						p.getInventory().setItem(1, confirm);
@@ -303,7 +303,7 @@ public class CreateGunCommand {
 				
 				LevelUnlock.put(p, level);
 				p.sendMessage(" §f» §8Set gun level unlock to §7 " + level);
-				p.sendMessage("§27. §aNow right-click the stick in your inventory to make the gun primary, or right-click the blaze rod in you inventory to make the gun secondary");
+				p.sendMessage("§27. §aNow right-click the red wool in your inventory to make the gun primary, or right-click the green wool in you inventory to make the gun secondary");
 				gunBuilderStep.put(p, 7);
 				
 				inventory.put(p, p.getInventory().getContents());

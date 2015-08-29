@@ -66,7 +66,7 @@ public class SetCommand {
 												}else{
 													p.getInventory().clear();
 													Items.setItem(p, CreateArenaCommand.redFlagTool, 0);
-													p.sendMessage(Main.codSignature + "§3Go to the §cred flag location§3 and right-click with the stick");
+													p.sendMessage(Main.codSignature + "§3Go to the §cred flag location§3 and right-click with the wool block");
 												}
 											}else if (getArena.getFlagLocation("blue", ArenaName) == null) {
 												if (CreateArenaCommand.creatingArena.get(p) != true) {
@@ -75,7 +75,7 @@ public class SetCommand {
 												}else{
 													p.getInventory().clear();
 													Items.setItem(p, CreateArenaCommand.blueFlagTool, 0);
-													p.sendMessage(Main.codSignature + "§3Go to the §9blue flag location§3 and right-click with the stick");
+													p.sendMessage(Main.codSignature + "§3Go to the §9blue flag location§3 and right-click with the wool block");
 												}
 											}
 										}else{
@@ -85,7 +85,7 @@ public class SetCommand {
 											}else{
 												p.getInventory().clear();
 												Items.setItem(p, CreateArenaCommand.redSpawnTool, 0);
-												p.sendMessage(Main.codSignature + "§3Go to the §cred team's §3spawn and right-click with the stick");
+												p.sendMessage(Main.codSignature + "§3Go to the §cred team's §3spawn and right-click with the wool block");
 											}
 										}
 									}else{
@@ -96,7 +96,7 @@ public class SetCommand {
 											}else{
 												p.getInventory().clear();
 												Items.setItem(p, CreateArenaCommand.redSpawnTool, 0);
-												p.sendMessage(Main.codSignature + "§3Go to the §cred team's §3spawn and right-click with the stick");
+												p.sendMessage(Main.codSignature + "§3Go to the §cred team's §3spawn and right-click with the wool block");
 											}
 										}
 									}
@@ -137,7 +137,7 @@ public class SetCommand {
 											}else{
 												p.getInventory().clear();
 												Items.setItem(p, CreateArenaCommand.redFlagTool, 0);
-												p.sendMessage(Main.codSignature + "§3Go to the §cred flag location§3 and right-click with the stick");
+												p.sendMessage(Main.codSignature + "§3Go to the §cred flag location§3 and right-click with the wool block");
 											}
 										}else if (getArena.getFlagLocation("blue", ArenaName) == null) {
 											if (CreateArenaCommand.creatingArena.get(p) != true) {
@@ -146,7 +146,7 @@ public class SetCommand {
 											}else{
 												p.getInventory().clear();
 												Items.setItem(p, CreateArenaCommand.blueFlagTool, 0);
-												p.sendMessage(Main.codSignature + "§3Go to the §9blue flag location§3 and right-click with the stick");
+												p.sendMessage(Main.codSignature + "§3Go to the §9blue flag location§3 and right-click with the wool block");
 											}
 										}
 									}else{
@@ -156,7 +156,7 @@ public class SetCommand {
 										}else{
 											p.getInventory().clear();
 											Items.setItem(p, CreateArenaCommand.blueSpawnTool, 0);
-											p.sendMessage(Main.codSignature + "§3Go to the §9blue team's §3spawn and right-click with the stick");
+											p.sendMessage(Main.codSignature + "§3Go to the §9blue team's §3spawn and right-click with the wool block");
 										}
 									}
 								}else{
@@ -167,7 +167,7 @@ public class SetCommand {
 										}else{
 											p.getInventory().clear();
 											Items.setItem(p, CreateArenaCommand.blueSpawnTool, 0);
-											p.sendMessage(Main.codSignature + "§3Go to the §9blue team's §3spawn and right-click with the stick");
+											p.sendMessage(Main.codSignature + "§3Go to the §9blue team's §3spawn and right-click with the wool block");
 										}
 									}
 								}
@@ -216,7 +216,7 @@ public class SetCommand {
 										}else{
 											p.getInventory().clear();
 											Items.setItem(p, CreateArenaCommand.oneinSpecTool, 8);
-											p.sendMessage(Main.codSignature + "§3Go to the §aspectator's §3spawn and right-click with the stick");
+											p.sendMessage(Main.codSignature + "§3Go to the §aspectator's §3spawn and right-click with the wool block");
 										}
 									}
 								}
@@ -391,7 +391,7 @@ public class SetCommand {
 						}else{
 							p.getInventory().clear();
 							Items.setItem(p, CreateArenaCommand.redFlagTool, 0);
-							p.sendMessage(Main.codSignature + "§3Go to the §cred flag location§3 and right-click with the stick");
+							p.sendMessage(Main.codSignature + "§3Go to the §cred flag location§3 and right-click with the wool block");
 						}
 					}
 				}else{
@@ -429,7 +429,7 @@ public class SetCommand {
 						}else{
 							p.getInventory().clear();
 							Items.setItem(p, CreateArenaCommand.blueFlagTool, 0);
-							p.sendMessage(Main.codSignature + "§3Go to the §9blue flag location§3 and right-click with the stick");
+							p.sendMessage(Main.codSignature + "§3Go to the §9blue flag location§3 and right-click with the wool block");
 						}
 					}
 				}else{
@@ -473,7 +473,7 @@ public class SetCommand {
 						}else{
 							p.getInventory().clear();
 							Items.setItem(p, CreateArenaCommand.ffaSpawnTool, 0);
-							p.sendMessage(Main.codSignature+ "§3Add spawns by right-clicking with the stick");
+							p.sendMessage(Main.codSignature+ "§3Add spawns by right-clicking with the wool block");
 						}
 					}
 					

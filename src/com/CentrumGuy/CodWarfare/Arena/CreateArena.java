@@ -43,7 +43,7 @@ public class CreateArena {
 				}
 				
 				if (ArenaType.equalsIgnoreCase("tdm") || ArenaType.equalsIgnoreCase("ctf") || ArenaType.equalsIgnoreCase("infect") || ArenaType.equalsIgnoreCase("kc")) {
-					p.sendMessage(Main.codSignature + "§3Go to the §cred team's §3spawn and right-click with the stick");
+					p.sendMessage(Main.codSignature + "§3Go to the §cred team's §3spawn and right-click with the wool block");
 					/*p.sendMessage(Main.codSignature + "§6Now set the §cred §6and §9blue §6spawns by typing:");
 					p.sendMessage(Main.codSignature + "§7- §3/cod set§b " + ArenaName + " §3spawn §cred");
 					p.sendMessage(Main.codSignature + "§7- §3/cod set§b " + ArenaName + " §3spawn §9blue");*/
@@ -57,13 +57,13 @@ public class CreateArena {
 							}else{
 								p.getInventory().clear();
 								Items.setItem(p, CreateArenaCommand.oneinSpecTool, 0);
-								p.sendMessage(Main.codSignature + "§3Go to the §aspectator's §3spawn and right-click with the stick");
+								p.sendMessage(Main.codSignature + "§3Go to the §aspectator's §3spawn and right-click with the wool block");
 								return;
 							}
 						}
 					}
 					
-					p.sendMessage(Main.codSignature+ "§3Add spawns by right-clicking with the stick");
+					p.sendMessage(Main.codSignature+ "§3Add spawns by right-clicking with the wool block");
 					/*p.sendMessage(Main.codSignature + "§6Now set the spawns by typing:");
 					p.sendMessage(Main.codSignature + "§7- §3/cod set§b " + ArenaName + " §3spawn §dnext");*/
 				}

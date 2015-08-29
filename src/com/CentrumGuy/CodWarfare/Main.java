@@ -24,16 +24,18 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import com.CentrumGuy.CodWarfare.Listeners;
+import com.CentrumGuy.CodWarfare.Updater.UpdateResult;
+import com.CentrumGuy.CodWarfare.Updater.UpdateType;
+import com.CentrumGuy.CodWarfare.Achievements.AchievementsAPI;
 import com.CentrumGuy.CodWarfare.Arena.BaseArena;
-import com.CentrumGuy.CodWarfare.Arena.LeaveArena;
 import com.CentrumGuy.CodWarfare.Arena.BaseArena.ArenaState;
 import com.CentrumGuy.CodWarfare.Arena.GGgunAPI;
+import com.CentrumGuy.CodWarfare.Arena.LeaveArena;
 import com.CentrumGuy.CodWarfare.Clans.MainClan;
 import com.CentrumGuy.CodWarfare.Commands.CreateArenaCommand;
 import com.CentrumGuy.CodWarfare.Commands.CreateGunCommand;
-import com.CentrumGuy.CodWarfare.Commands.GiveGunCommand;
 import com.CentrumGuy.CodWarfare.Commands.MainCommand;
+import com.CentrumGuy.CodWarfare.Files.AchievementsFile;
 import com.CentrumGuy.CodWarfare.Files.ArenasFile;
 import com.CentrumGuy.CodWarfare.Files.AvailableGunsFile;
 import com.CentrumGuy.CodWarfare.Files.ClansFile;
@@ -57,14 +59,15 @@ import com.CentrumGuy.CodWarfare.Inventories.Guns;
 import com.CentrumGuy.CodWarfare.Inventories.KitInventory;
 import com.CentrumGuy.CodWarfare.Inventories.ShopInventoryPrimary;
 import com.CentrumGuy.CodWarfare.Inventories.ShopInventorySecondary;
+import com.CentrumGuy.CodWarfare.MySQL.MySQL;
 import com.CentrumGuy.CodWarfare.OtherLoadout.Lethal;
 import com.CentrumGuy.CodWarfare.OtherLoadout.Tactical;
 import com.CentrumGuy.CodWarfare.OtherLoadout.WeaponUtils;
 import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
 import com.CentrumGuy.CodWarfare.SpecialWeapons.AirStrike;
+import com.CentrumGuy.CodWarfare.SpecialWeapons.Dogs;
 import com.CentrumGuy.CodWarfare.SpecialWeapons.ElectroMagneticPulse;
-import com.CentrumGuy.CodWarfare.Updater.UpdateResult;
-import com.CentrumGuy.CodWarfare.Updater.UpdateType;
+import com.CentrumGuy.CodWarfare.SpecialWeapons.Nuke;
 import com.CentrumGuy.CodWarfare.Utilities.ColorCodes;
 import com.CentrumGuy.CodWarfare.Utilities.IChatMessage;
 import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
@@ -94,7 +97,7 @@ import com.shampaggon.crackshot.CSUtility;
 	
 	public class Main extends JavaPlugin {
 		
-		public static String version = "v2.7";
+		public static String version = "v4.0.0";
 		
 		  public static Location Lobby;
 		  public static ItemStack UpdateBook;
@@ -136,10 +139,14 @@ import com.shampaggon.crackshot.CSUtility;
 		  public static boolean spamDetector = false;
 		  public static boolean blockCMDs = false;
 		  public static List<String> cmdList = new ArrayList<String>();
+		  public static boolean exoJump = true;
+		  public static boolean weapons = true;
+		  public static boolean prefixGM = false;
 		  
 		  public static CSUtility CrackShotAPI = null;
 		  
 		  public static boolean extras;
+		  public static boolean mySQL;
 		  
 		  /*public static CODTeam red;
 		  public static CODTeam blue;
@@ -152,11 +159,10 @@ import com.shampaggon.crackshot.CSUtility;
 		  
 		  public static HashMap<Player, String> dispName = new HashMap<Player, String>();
 
-		  private static double getFileVersion(String version) {
+		  private static String getFileVersion(String version) {
 			  version = StringUtils.remove(version, ThisPlugin.getPlugin().getName() + " v");
 			  version = StringUtils.remove(version, " ");
-			  double d = Double.parseDouble(version);
-			  return d;
+			  return version;
 		  }
 		  
 		  @SuppressWarnings("unused")
@@ -168,6 +174,8 @@ import com.shampaggon.crackshot.CSUtility;
 		  
 		@Override
 		public void onEnable() {
+			mySQL = getConfig().getBoolean("MySQL.Enabled");
+			MySQL.mySQL = mySQL;
 			
 			version = getDescription().getVersion();
 				
@@ -258,12 +266,14 @@ import com.shampaggon.crackshot.CSUtility;
 			ClansFile.setup(this);
 			WeaponsFile.setup(this);
 			PerksFile.setup(this);
+			AchievementsFile.setup(this);
 			
 			MainClan.setUp(this);
 			
 			BaseArena.state = ArenaState.WAITING;
 			
 			ItemsAndInventories.setUp();
+			AchievementsAPI.createAchievements();
 			
 			GGgunAPI.loadGuns();
 			Tactical.loadTacticals();
@@ -278,6 +288,8 @@ import com.shampaggon.crackshot.CSUtility;
 			min_Players = ThisPlugin.getPlugin().getConfig().getInt("Min-Players");
 			max_Players = ThisPlugin.getPlugin().getConfig().getInt("Max-Players");
 			spamDetector = ThisPlugin.getPlugin().getConfig().getBoolean("SpamDetector");
+			exoJump = ThisPlugin.getPlugin().getConfig().getBoolean("ExoJump");
+			prefixGM = ThisPlugin.getPlugin().getConfig().getBoolean("PrefixGamemode");
 			
 			String h = ThisPlugin.getPlugin().getConfig().getString("Header");
 			String f = ThisPlugin.getPlugin().getConfig().getString("Footer");
@@ -297,6 +309,12 @@ import com.shampaggon.crackshot.CSUtility;
 				CrackShot = true;
 			}else{
 				CrackShot = false;
+			}
+			
+			if (Bukkit.getServer().getPluginManager().getPlugin("CODWeapons") != null) {
+				weapons = true;
+			}else{
+				weapons = false;
 			}
 			
 			if (CrackShot) {
@@ -325,7 +343,9 @@ import com.shampaggon.crackshot.CSUtility;
 		    ClanCost = ThisPlugin.getPlugin().getConfig().getInt("ClanCost");
 		    
 		    ElectroMagneticPulse.setUp();
+		    Dogs.setUp();
 		    AirStrike.setUp();
+		    Nuke.setUp();
 		    
 		    Guns.loadGuns();
 		    
@@ -363,7 +383,7 @@ import com.shampaggon.crackshot.CSUtility;
 					if (ThisPlugin.getPlugin().getConfig().getBoolean("ServerBased")) {
 						BukkitRunnable br = new BukkitRunnable() {
 							public void run() {
-								JoinCOD.join(true, p);
+								JoinCOD.join(true, p, false);
 							}
 						};
 						
@@ -372,7 +392,7 @@ import com.shampaggon.crackshot.CSUtility;
 		    		
 		    		Main.createGameBoard(p);
 		    		Main.createLobbyBoard(p);
-		    		if (ScoresFile.getData().contains("Scores." + p.getUniqueId())) Scores.loadScores(p);
+		    		if (Scores.scoresExist(p)) Scores.loadScores(p);
 		    		
 		    		Listeners.lastDamager.put(p, null);
 		    		
@@ -382,8 +402,8 @@ import com.shampaggon.crackshot.CSUtility;
 					ItemsAndInventories.setUpPlayer(p);
 					ItemsAndInventories.setAvailableGuns(p);
 		    		
-		    		GiveGunCommand.addAllWaitlistGuns(p);
-		    		
+					AchievementsAPI.setUpPlayer(p);
+					AchievementsAPI.unlockJoinAchievements(p);
 		    	}
 		    }
 		}
@@ -441,7 +461,7 @@ import com.shampaggon.crackshot.CSUtility;
 						World w = Bukkit.getServer().getWorlds().get(i);
 						for (int ii = 0 ; ii < w.getEntities().size() ; ii++) {
 							Entity e = w.getEntities().get(ii);
-							if (e.hasMetadata("CODnoPickup") || e.hasMetadata("codredflag") || e.hasMetadata("codblueflag") || e.hasMetadata("codRedTag") || e.hasMetadata("codBlueTag")) e.remove();
+							if (e.hasMetadata("CODnoPickup") || e.hasMetadata("codredflag") || e.hasMetadata("codblueflag") || e.hasMetadata("codRedTag") || e.hasMetadata("codBlueTag") || e.hasMetadata("codAllowHit")) e.remove();
 						}
 					}
 					

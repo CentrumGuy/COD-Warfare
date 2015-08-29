@@ -2,13 +2,15 @@ package com.CentrumGuy.CodWarfare.Files;
  
 import java.io.File;
 import java.io.IOException;
- 
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+
+import com.CentrumGuy.CodWarfare.MySQL.MySQL;
  
 public class ScoresFile {
  
@@ -26,7 +28,7 @@ public class ScoresFile {
         static File sfile;
        
         public static void setup(Plugin p) {
-               
+            if (!(MySQL.mySQLenabled())) {
                 if (!p.getDataFolder().exists()) {
                         p.getDataFolder().mkdir();
                 }
@@ -43,6 +45,13 @@ public class ScoresFile {
                 }
                
                 Scores = YamlConfiguration.loadConfiguration(sfile);
+            }else{
+            	try {
+            		MySQL.createScoresTable();
+            	}catch (Exception e) {
+            		e.printStackTrace();
+            	}
+            }
         }
        
         public static FileConfiguration getData() {
@@ -50,16 +59,20 @@ public class ScoresFile {
         }
        
         public static void saveData() {
+        	if (!(MySQL.mySQLenabled())) {
                 try {
                         Scores.save(sfile);
                 }
                 catch (IOException e) {
                         Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save Scores.yml!");
                 }
+        	}
         }
        
         public static void reloadData() {
+        	if (!(MySQL.mySQLenabled())) {
                 Scores = YamlConfiguration.loadConfiguration(sfile);
+        	}
         }
        
         public static PluginDescriptionFile getDesc() {

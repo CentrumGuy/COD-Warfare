@@ -8,9 +8,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.CentrumGuy.CodWarfare.Main;
 import com.CentrumGuy.CodWarfare.Updater;
-import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
 import com.CentrumGuy.CodWarfare.Updater.UpdateResult;
 import com.CentrumGuy.CodWarfare.Updater.UpdateType;
+import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
 import com.CentrumGuy.CodWarfare.Utilities.IChatMessage;
 
 public class UpdateCommand {
@@ -19,10 +19,8 @@ public class UpdateCommand {
 	private static HashMap<Player, BukkitRunnable> task = new HashMap<Player, BukkitRunnable>();
 	public static boolean Updated = false;
 	
-	  private static double getFileVersion(String version) {
-		  version = StringUtils.remove(version, ThisPlugin.getPlugin().getName() + " v");
-		  double d = Double.parseDouble(version);
-		  return d;
+	  private static String getFileVersion(String version) {
+		  return StringUtils.remove(version, ThisPlugin.getPlugin().getName() + " v");
 	  }
 
 	public static void update(final Player p, String[] args) {

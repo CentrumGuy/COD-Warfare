@@ -1,6 +1,12 @@
 package com.CentrumGuy.CodWarfare;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -608,9 +614,25 @@ public class Updater {
      * @return true if Updater should consider the remote version an update, false if not.
      */
     
-	private double getFileVersion(String version) {
+	private int getFileVersion(String version) {
 		version = StringUtils.remove(version, "COD" + " v");
-	  	double d = Double.parseDouble(version);
+		StringBuilder sb = new StringBuilder(version);
+		int NumberOfPeriods = 0;
+		for (int i = 0 ; i < version.length() ; i++) {
+			if (sb.charAt(i) == '.') NumberOfPeriods++;
+		}
+		
+		if (NumberOfPeriods == 0) {
+			version = version + ".0.0";
+		}
+		
+		if (NumberOfPeriods == 1) {
+			version = version + ".0";
+		}
+		
+		version = StringUtils.remove(version, '.');
+		
+	  	int d = Integer.parseInt(version);
 	  	return d;
 	}
 	  

@@ -16,21 +16,31 @@ import com.CentrumGuy.CodWarfare.Utilities.Items;
 public class CreateArenaCommand {
 	public static HashMap<Player, Boolean> creatingArena = new HashMap<Player, Boolean>();
 	public static HashMap<Player, ItemStack[]> savedInventory = new HashMap<Player, ItemStack[]>();
-	public static ItemStack redSpawnTool = Items.createItem(Material.STICK, 1, 0, "§6» §3Right click to set §cred spawn §6«");
-	public static ItemStack blueSpawnTool = Items.createItem(Material.STICK, 1, 0, "§6» §3Right click to set §9blue spawn §6«");
-	public static ItemStack ffaSpawnTool = Items.createItem(Material.STICK, 1, 0, "§6» §3Right click to add §dspawn §6«");
+	public static ItemStack redSpawnTool = Items.createItem(Material.WOOL, 1, 14, "§6» §3Right click to set §cred spawn §6«");
+	public static ItemStack blueSpawnTool = Items.createItem(Material.WOOL, 1, 11, "§6» §3Right click to set §9blue spawn §6«");
+	public static ItemStack ffaSpawnTool = Items.createItem(Material.WOOL, 1, 2, "§6» §3Right click to add §dspawn §6«");
 	
-	public static ItemStack redFlagTool = Items.createItem(Material.STICK, 1, 0, "§6» §3Right click to add §cred flag spawn §6«");
-	public static ItemStack blueFlagTool = Items.createItem(Material.STICK, 1, 0, "§6» §3Right click to add §9blue flag spawn §6«");
+	public static ItemStack redFlagTool = Items.createItem(Material.WOOL, 1, 14, "§6» §3Right click to add §cred flag spawn §6«");
+	public static ItemStack blueFlagTool = Items.createItem(Material.WOOL, 1, 11, "§6» §3Right click to add §9blue flag spawn §6«");
 	
-	public static ItemStack oneinSpecTool = Items.createItem(Material.STICK, 1, 0, "§6» §3Right click to add §aspectator spawn §6«");
+	public static ItemStack oneinSpecTool = Items.createItem(Material.WOOL, 1, 5, "§6» §3Right click to add §aspectator spawn §6«");
 	
-	public static ItemStack enabledTool = Items.createItem(Material.BLAZE_ROD, 1, 0, "§6» §eRight click to enable the arena §6«");
+	public static ItemStack enabledTool = Items.createItem(Material.WOOL, 1, 5, "§6» §eRight click to enable the arena §6«");
 	
 	public static HashMap<Player, String> arenaCreating = new HashMap<Player, String>();
 	
 	public static void createArena(String ArenaName, String ArenaType, Player p) {
 		if (ArenaType.equalsIgnoreCase("tdm") || ArenaType.equalsIgnoreCase("infect") || ArenaType.equalsIgnoreCase("gun") || ArenaType.equalsIgnoreCase("ffa") || ArenaType.equalsIgnoreCase("onein") || ArenaType.equalsIgnoreCase("CTF") || ArenaType.equalsIgnoreCase("KC")) {
+			
+			if (Main.prefixGM) {
+				if (ArenaType.equalsIgnoreCase("tdm")) ArenaName = ArenaName + "_TDM";
+				if (ArenaType.equalsIgnoreCase("infect")) ArenaName = ArenaName + "_INF";
+				if (ArenaType.equalsIgnoreCase("gun")) ArenaName = ArenaName + "_GUN";
+				if (ArenaType.equalsIgnoreCase("ffa")) ArenaName = ArenaName + "_FFA";
+				if (ArenaType.equalsIgnoreCase("onein")) ArenaName = ArenaName + "_OITC";
+				if (ArenaType.equalsIgnoreCase("ctf")) ArenaName = ArenaName + "_CTF";
+				if (ArenaType.equalsIgnoreCase("kc")) ArenaName = ArenaName + "_KC";
+			}
 			
 			CreateArena.createArena(ArenaName, ArenaType.toUpperCase(), p);
 			

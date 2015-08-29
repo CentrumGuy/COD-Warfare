@@ -12,68 +12,66 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 import com.CentrumGuy.CodWarfare.MySQL.MySQL;
  
-public class ShopFile {
+public class AchievementsFile {
  
-        private ShopFile() { }
+        private AchievementsFile() { }
        
-        static ShopFile instance = new ShopFile();
+        static AchievementsFile instance = new AchievementsFile();
        
-        public static ShopFile getInstance() {
+        public static AchievementsFile getInstance() {
                 return instance;
         }
        
         static Plugin p;
        
-        static FileConfiguration Shops;
-        static File sfile;
+        static FileConfiguration achivements;
+        static File afile;
        
         public static void setup(Plugin p) {
-        	if (!(MySQL.mySQLenabled())) {
+            if (!(MySQL.mySQLenabled())) {
                 if (!p.getDataFolder().exists()) {
                         p.getDataFolder().mkdir();
                 }
                
-                sfile = new File(p.getDataFolder(), "Shops.yml");
+                afile = new File(p.getDataFolder(), "Achivements.yml");
                
-                if (!sfile.exists()) {
+                if (!afile.exists()) {
                         try {
-                                sfile.createNewFile();
+                                afile.createNewFile();
                         }
                         catch (IOException e) {
-                                Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create Shops.yml!");
+                                Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create Achivements.yml!");
                         }
                 }
                
-                Shops = YamlConfiguration.loadConfiguration(sfile);
-                
-        	}else{
+                achivements = YamlConfiguration.loadConfiguration(afile);
+            }else{
             	try {
-					MySQL.createSecondaryShopTable();
-					MySQL.createPrimaryShopTable();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+            		MySQL.createAchievementsTable();
+            	}catch (Exception e) {
+            		e.printStackTrace();
+            	}
             }
         }
        
         public static FileConfiguration getData() {
-                return Shops;
+                return achivements;
         }
        
         public static void saveData() {
         	if (!(MySQL.mySQLenabled())) {
                 try {
-                	Shops.save(sfile);
+                        achivements.save(afile);
                 }
                 catch (IOException e) {
-                        Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save Shops.yml!");
+                        Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save Achivements.yml!");
                 }
         	}
         }
        
         public static void reloadData() {
         	if (!(MySQL.mySQLenabled())) {
-        		Shops = YamlConfiguration.loadConfiguration(sfile);
+                achivements = YamlConfiguration.loadConfiguration(afile);
         	}
         }
        

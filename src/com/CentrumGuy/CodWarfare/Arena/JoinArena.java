@@ -15,7 +15,7 @@ public class JoinArena {
 			
 		}else{
 			
-			JoinCOD.join(true, p);
+			JoinCOD.join(true, p, false);
 		}
 	}
 }

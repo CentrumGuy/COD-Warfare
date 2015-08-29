@@ -59,6 +59,7 @@ public class ONEINArena {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void startONEIN(final String Arena) {
 		Main.PlayingPlayers.addAll(Main.WaitingPlayers);
 		Main.WaitingPlayers.clear();
@@ -121,7 +122,7 @@ public class ONEINArena {
 							p.getInventory().setItem(1, Main.CrackShotAPI.generateWeapon(GetNormalName.get(KitInventory.getKit(p).getItem(3).getItemMeta().getDisplayName())));
 						}
 						
-						ItemStack ammo = new ItemStack(KitInventory.getKit(p).getItem(4).getType(), 1);
+						ItemStack ammo = new ItemStack(KitInventory.getKit(p).getItem(4).getType(), 1, KitInventory.getKit(p).getItem(4).getData().getData());
 						ItemMeta ammoMeta = ammo.getItemMeta();
 						ammoMeta.setDisplayName(KitInventory.getKit(p).getItem(4).getItemMeta().getDisplayName());
 						ammo.setItemMeta(ammoMeta);
@@ -157,7 +158,7 @@ public class ONEINArena {
 					p.getInventory().setItem(1, Main.CrackShotAPI.generateWeapon(GetNormalName.get(KitInventory.getKit(p).getItem(3).getItemMeta().getDisplayName())));
 				}
 				
-				ItemStack ammo = new ItemStack(KitInventory.getKit(p).getItem(4).getType(), 1);
+				ItemStack ammo = new ItemStack(KitInventory.getKit(p).getItem(4).getType(), 1, KitInventory.getKit(p).getItem(4).getData().getData());
 				ItemMeta ammoMeta = ammo.getItemMeta();
 				ammoMeta.setDisplayName(KitInventory.getKit(p).getItem(4).getItemMeta().getDisplayName());
 				ammo.setItemMeta(ammoMeta);
@@ -198,6 +199,7 @@ public class ONEINArena {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void respawnPlayer(final Player p, String Arena) {	
 		Lives.put(p, (Lives.get(p)) - (1));
 		
@@ -272,7 +274,7 @@ public class ONEINArena {
 			p.getInventory().setItem(1, Main.CrackShotAPI.generateWeapon(GetNormalName.get(KitInventory.getKit(p).getItem(3).getItemMeta().getDisplayName())));
 		}
 		
-		ItemStack ammo = new ItemStack(KitInventory.getKit(p).getItem(4).getType(), 1);
+		ItemStack ammo = new ItemStack(KitInventory.getKit(p).getItem(4).getType(), 1, KitInventory.getKit(p).getItem(4).getData().getData());
 		ItemMeta ammoMeta = ammo.getItemMeta();
 		ammoMeta.setDisplayName(KitInventory.getKit(p).getItem(4).getItemMeta().getDisplayName());
 		ammo.setItemMeta(ammoMeta);
@@ -294,8 +296,9 @@ public class ONEINArena {
 		}, 100);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void onKill(Player killer) {
-		ItemStack ammo = new ItemStack(KitInventory.getKit(killer).getItem(4).getType(), 1);
+		ItemStack ammo = new ItemStack(KitInventory.getKit(killer).getItem(4).getType(), 1, KitInventory.getKit(killer).getItem(4).getData().getData());
 		ItemMeta ammoMeta = ammo.getItemMeta();
 		ammoMeta.setDisplayName(KitInventory.getKit(killer).getItem(4).getItemMeta().getDisplayName());
 		ammo.setItemMeta(ammoMeta);

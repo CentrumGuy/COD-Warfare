@@ -1,5 +1,10 @@
 package com.CentrumGuy.CodWarfare.OtherLoadout;
 
+import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +20,8 @@ import org.bukkit.potion.PotionEffectType;
 import com.CentrumGuy.CodWarfare.Main;
 import com.CentrumGuy.CodWarfare.Files.PerksFile;
 import com.CentrumGuy.CodWarfare.Interface.ItemsAndInventories;
+import com.CentrumGuy.CodWarfare.MySQL.MySQL;
+import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
 import com.CentrumGuy.CodWarfare.Utilities.Items;
 
 public class PerkAPI {
@@ -68,18 +75,62 @@ public class PerkAPI {
 	}
 	
 	public static void savePerk(Player p) {
-		PerksFile.getData().set("Perks.CurrentlyUsing." + p.getUniqueId(), "" + perk.get(p));
-		PerksFile.saveData();
-		PerksFile.reloadData();
+		if (!(MySQL.mySQLenabled())) {
+			PerksFile.getData().set("Perks.CurrentlyUsing." + p.getUniqueId(), "" + perk.get(p));
+			PerksFile.saveData();
+			PerksFile.reloadData();
+		}else{
+			try {
+				Connection conn = MySQL.getConnection();
+				String INSERT = "INSERT INTO CODPerks (uuid, currentperk) VALUES(?, ?) ON DUPLICATE KEY UPDATE currentperk=?";
+				PreparedStatement ps = conn.prepareStatement(INSERT);
+				ps.setString(1, p.getUniqueId().toString());
+				ps.setString(2, "" + perk.get(p));
+				ps.setString(3, "" + perk.get(p));
+				
+				ps.executeUpdate();
+				
+				ps.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static void loadPerk(Player p) {
-		String name = PerksFile.getData().getString("Perks.CurrentlyUsing." + p.getUniqueId());
-		
-		if (name != null) {
-			perk.put(p, getPerk(name));
+		if (!(MySQL.mySQLenabled())) {
+			String name = PerksFile.getData().getString("Perks.CurrentlyUsing." + p.getUniqueId());
+			
+			if (name != null) {
+				perk.put(p, getPerk(name));
+			}else{
+				perk.put(p, Perk.NO_PERK);
+			}
 		}else{
-			perk.put(p, Perk.NO_PERK);
+			try {
+				Connection conn = MySQL.getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT uuid,currentperk FROM CODPerks");
+				ResultSet result = ps.executeQuery();
+				
+				while (result.next()) {
+					if (result.getString("uuid").equals(p.getUniqueId().toString())) {
+						if ((result.getString("currentperk") == null) || (result.getString("currentperk").equals(""))) {
+							perk.put(p, Perk.NO_PERK);
+						}else{
+							perk.put(p, getPerk(result.getString("currentperk")));
+						}
+						
+						break;
+					}
+				}
+				
+				result.close();
+				ps.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -92,26 +143,89 @@ public class PerkAPI {
 	}
 	
 	public static void loadOwnedPerks(Player p) {
-		List<String> perkNames = PerksFile.getData().getStringList("Perks.OwnedPerks." + p.getUniqueId());
-		ownedPerks.put(p, new ArrayList<Perk>());
-		
-		for (int i = 0 ; i < perkNames.size() ; i++) {
-			String name = perkNames.get(i);
-			if (getPerk(name) == Perk.NO_PERK) continue;
+		if (!(MySQL.mySQLenabled())) {
+			List<String> perkNames = PerksFile.getData().getStringList("Perks.OwnedPerks." + p.getUniqueId());
+			ownedPerks.put(p, new ArrayList<Perk>());
 			
-			ownedPerks.get(p).add(getPerk(name));
+			for (int i = 0 ; i < perkNames.size() ; i++) {
+				String name = perkNames.get(i);
+				if (getPerk(name) == Perk.NO_PERK) continue;
+				
+				ownedPerks.get(p).add(getPerk(name));
+			}
+		}else{
+			try {
+				Connection conn = MySQL.getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT uuid,list FROM CODPerks");
+				ResultSet rs = ps.executeQuery();
+				
+				while (rs.next()) {
+					if (rs.getString("uuid").equals(p.getUniqueId().toString())) {
+						ArrayList<String> perkNames = MySQL.stringToList(MySQL.clobToString(rs.getClob("list")));
+						if ((perkNames == null) || (perkNames.isEmpty())) {
+							ownedPerks.put(p, new ArrayList<Perk>());
+						}else{
+							ownedPerks.put(p, new ArrayList<Perk>());
+							
+							for (int i = 0 ; i < perkNames.size() ; i++) {
+								String name = perkNames.get(i);
+								if (getPerk(name) == Perk.NO_PERK) continue;
+								
+								ownedPerks.get(p).add(getPerk(name));
+							}
+						}
+						
+						break;
+					}
+				}
+				
+				if (ownedPerks.get(p) == null) {
+					ownedPerks.put(p, new ArrayList<Perk>());
+				}
+				
+				rs.close();
+				ps.close();
+				conn.close();
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	public static void saveOwnedPerks(Player p) {	
-		List<String> perkNames = new ArrayList<String>();
-		for (Perk perk : ownedPerks.get(p)) {
-			perkNames.add("" + perk);
+		if (!(MySQL.mySQLenabled())) {
+			List<String> perkNames = new ArrayList<String>();
+			for (Perk perk : ownedPerks.get(p)) {
+				perkNames.add("" + perk);
+			}
+			
+			PerksFile.getData().set("Perks.OwnedPerks." + p.getUniqueId(), perkNames);
+			PerksFile.saveData();
+			PerksFile.reloadData();
+		}else{
+			try {
+				Connection conn = MySQL.getConnection();
+				String INSERT = "INSERT INTO CODPerks (uuid, list) VALUES(?, ?) ON DUPLICATE KEY UPDATE list=?";
+				PreparedStatement ps = conn.prepareStatement(INSERT);
+				ps.setString(1, p.getUniqueId().toString());
+				
+				ArrayList<String> perkNames = new ArrayList<String>();
+				for (Perk perk : ownedPerks.get(p)) {
+					perkNames.add("" + perk);
+				}
+				
+				Clob clob = MySQL.stringToClob(MySQL.listToString(perkNames), conn);
+				ps.setClob(2, clob);
+				ps.setClob(3, clob);
+				
+				ps.executeUpdate();
+				
+				ps.close();
+				conn.close();
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		
-		PerksFile.getData().set("Perks.OwnedPerks." + p.getUniqueId(), perkNames);
-		PerksFile.saveData();
-		PerksFile.reloadData();
 	}
 	
 	public static boolean ownsPerk(Player p, Perk name) {
@@ -127,7 +241,7 @@ public class PerkAPI {
 	}
 	
 	public static int getCost(Perk perk) {
-		if (PerksFile.getData().get("Perks.Cost." + perk) != null) return PerksFile.getData().getInt("Perks.Cost." + perk);
+		if (ThisPlugin.getPlugin().getConfig().get("Perks.Cost." + perk) != null) return ThisPlugin.getPlugin().getConfig().getInt("Perks.Cost." + perk);
 		return 0;
 	}
 	

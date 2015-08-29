@@ -2,13 +2,15 @@ package com.CentrumGuy.CodWarfare.Files;
  
 import java.io.File;
 import java.io.IOException;
- 
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+
+import com.CentrumGuy.CodWarfare.MySQL.MySQL;
  
 public class KitFile {
  
@@ -26,7 +28,7 @@ public class KitFile {
         static File kfile;
        
         public static void setup(Plugin p) {
-               
+             if (!(MySQL.mySQLenabled())) {
                 if (!p.getDataFolder().exists()) {
                         p.getDataFolder().mkdir();
                 }
@@ -43,6 +45,13 @@ public class KitFile {
                 }
                
                 Kits = YamlConfiguration.loadConfiguration(kfile);
+             }else{
+            	 try {
+            		 MySQL.createKitsTable();
+            	 }catch (Exception e) {
+            		 e.printStackTrace();
+            	 }
+             }
         }
        
         public static FileConfiguration getData() {
@@ -50,16 +59,20 @@ public class KitFile {
         }
        
         public static void saveData() {
+        	if (!(MySQL.mySQLenabled())) {
                 try {
                 	Kits.save(kfile);
                 }
                 catch (IOException e) {
                         Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save arenas.yml!");
                 }
+        	}
         }
        
         public static void reloadData() {
-        	Kits = YamlConfiguration.loadConfiguration(kfile);
+        	if (!(MySQL.mySQLenabled())) {
+        		Kits = YamlConfiguration.loadConfiguration(kfile);
+        	}
         }
        
         public static PluginDescriptionFile getDesc() {

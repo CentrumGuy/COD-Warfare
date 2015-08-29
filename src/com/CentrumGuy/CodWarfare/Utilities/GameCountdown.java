@@ -16,7 +16,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.CentrumGuy.CodWarfare.Main;
 import com.CentrumGuy.CodWarfare.OtherLoadout.PerkAPI;
 import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
-import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
 
 public class GameCountdown {
 	
@@ -462,16 +461,20 @@ public class GameCountdown {
 								PerkAPI.onStartOfMatch();
 								
 								if (Main.PlayingPlayers.contains(p)) {
-					                if(p.hasPermission("cod.exoboost")){
-					                    p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1200, 2));
-					                }else{
-					                    if(Main.WaitingPlayers.contains(p)){
-					                        p.removePotionEffect(PotionEffectType.JUMP);
-					                    }
-					                }
+									if (Main.exoJump) {
+						                if(p.hasPermission("cod.exojump")) {
+						                    p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1200, 2));
+						                }else{
+						                    if(Main.WaitingPlayers.contains(p)){
+						                        p.removePotionEffect(PotionEffectType.JUMP);
+						                    }
+						                }
+									}
 					            }
 								
 								if (countdownPlayers.contains(p)) countdownPlayers.remove(p);
+								
+								startingMatch.onStartOfMatch();
 							}
 							
 							timeLeft = timeLeft - 1;
@@ -500,14 +503,18 @@ public class GameCountdown {
 			
 			PerkAPI.onStartOfMatch();
 			if (Main.PlayingPlayers.contains(p)) {
-                if(p.hasPermission("cod.exoboost")){
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1200, 2));
-                }else{
-                    if(Main.WaitingPlayers.contains(p)){
-                        p.removePotionEffect(PotionEffectType.JUMP);
-                    }
-                }
+				if (Main.exoJump) {
+	                if(p.hasPermission("cod.exojump")) {
+	                    p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1200, 2));
+	                }else{
+	                    if(Main.WaitingPlayers.contains(p)){
+	                        p.removePotionEffect(PotionEffectType.JUMP);
+	                    }
+	                }
+				}
             }
+			
+			startingMatch.onStartOfMatch();
 		}
 	}
 }

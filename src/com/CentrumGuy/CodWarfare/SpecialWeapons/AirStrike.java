@@ -42,7 +42,7 @@ public class AirStrike {
 			Player p = (Player) e.getEntity();
 			
 			if ((Main.PlayingPlayers.contains(killer)) && (Main.PlayingPlayers.contains(p))) {
-				if ((Main.GameKillStreakScore.get(killer.getName()).getScore() == 15) || ((Main.GameKillStreakScore.get(killer.getName()).getScore() == 14) && (PerkAPI.getPerk(killer) == Perk.HARDLINE))) {
+				if ((Main.GameKillStreakScore.get(killer.getName()).getScore() == 20) || ((Main.GameKillStreakScore.get(killer.getName()).getScore() == 19) && (PerkAPI.getPerk(killer) == Perk.HARDLINE))) {
 					killer.getInventory().addItem(Airstrike);
 					killer.updateInventory();
 					killer.sendMessage(Main.codSignature + "§c§lYou got an Airstrike. Use it fast by right-clicking it!");
@@ -73,7 +73,7 @@ public class AirStrike {
 						for (Player pp : GetPlayersOnOtherTeam.get(p)) {
 							if (!(isUnderRoof(pp))) {
 								ParticleEffect.EXPLOSION_LARGE.display((float) 0, (float) 0, (float) 0, 0, 3, pp.getLocation().add(0, 1, 0));
-								pp.playSound(pp.getLocation(), Sound.EXPLODE, 20, 0);
+								pp.playSound(pp.getLocation(), Sound.EXPLODE, 1F, 1F);
 								Damage.damage(p, pp, 200);
 							}
 						}

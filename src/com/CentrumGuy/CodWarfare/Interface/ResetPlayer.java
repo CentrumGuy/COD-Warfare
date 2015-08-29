@@ -13,11 +13,11 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 
 import com.CentrumGuy.CodWarfare.Main;
+import com.CentrumGuy.CodWarfare.Achievements.AchievementsAPI;
 import com.CentrumGuy.CodWarfare.Arena.CTFArena;
 import com.CentrumGuy.CodWarfare.Arena.PickRandomArena;
 import com.CentrumGuy.CodWarfare.Arena.getArena;
 import com.CentrumGuy.CodWarfare.Files.LobbyFile;
-import com.CentrumGuy.CodWarfare.Files.ScoresFile;
 import com.CentrumGuy.CodWarfare.Inventories.AGPInventory;
 import com.CentrumGuy.CodWarfare.Inventories.AGSInventory;
 import com.CentrumGuy.CodWarfare.Inventories.Guns;
@@ -55,6 +55,16 @@ public class ResetPlayer {
 			}
 		}
 		
+		if (!(LobbyFile.getData().getConfigurationSection("Lobby") == null)) {
+			p.teleport(Lobby.getLobby());
+		}else{
+			p.teleport(p.getWorld().getSpawnLocation());
+			
+			if (p.isOp()) {
+				p.sendMessage(Main.codSignature + "§cPlease set a lobby by typing §4/cod lobby set");
+			}
+		}
+		
 		p.setAllowFlight(false);
 		p.setFlying(false);
 		
@@ -81,7 +91,8 @@ public class ResetPlayer {
 		}
 		
 		p.getInventory().setItem(0, Main.shoptool);
-		if (Main.testGuns == true) p.getInventory().setItem(6, Main.tryGuns);
+		p.getInventory().setItem(6, AchievementsAPI.getAchievementsItem(p));
+		if (Main.testGuns == true) p.getInventory().setItem(7, Main.tryGuns);
 		p.getInventory().setHeldItemSlot(4);
 		p.closeInventory();
 		
@@ -121,18 +132,12 @@ public class ResetPlayer {
 		//player.getInventory().setItemInHand(UpdateBook);
 		//player.getInventory().setHeldItemSlot(0);
 		
-		if (ScoresFile.getData().contains("Scores." + p.getUniqueId())) {
+		if (Scores.scoresExist(p)) {
 			Scores.saveScores(p);
 			Scores.loadScores(p);
 			float precent = (((float) Exp.ExpNow.get(p)) / ((float) Exp.NeededExpNow.get(p)));
 			p.setExp(precent);
 			Main.setLobbyBoard(p);
-		}
-		
-		if (!(LobbyFile.getData().getConfigurationSection("Lobby") == null)) {
-			p.teleport(Lobby.getLobby());
-		}else if (p.isOp()) {
-			p.sendMessage(Main.codSignature + "§cPlease set a lobby by typing §4/cod lobby set");
 		}
 		
 		Color c = Color.fromRGB(255, 255, 0);

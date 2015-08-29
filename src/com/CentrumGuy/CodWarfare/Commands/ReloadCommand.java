@@ -9,6 +9,7 @@ import com.CentrumGuy.CodWarfare.Arena.Countdown;
 import com.CentrumGuy.CodWarfare.Arena.LeaveArena;
 import com.CentrumGuy.CodWarfare.Arena.PickRandomArena;
 import com.CentrumGuy.CodWarfare.Clans.MainClan;
+import com.CentrumGuy.CodWarfare.Files.AchievementsFile;
 import com.CentrumGuy.CodWarfare.Files.ArenasFile;
 import com.CentrumGuy.CodWarfare.Files.AvailableGunsFile;
 import com.CentrumGuy.CodWarfare.Files.ClansFile;
@@ -85,6 +86,7 @@ public class ReloadCommand {
 			ClansFile.setup(ThisPlugin.getPlugin());
 			WeaponsFile.setup(ThisPlugin.getPlugin());
 			PerksFile.setup(ThisPlugin.getPlugin());
+			AchievementsFile.setup(ThisPlugin.getPlugin());
 			
 			ThisPlugin.getPlugin().reloadConfig();
 			EnabledArenasFile.reloadData();
@@ -101,6 +103,7 @@ public class ReloadCommand {
 			ClansFile.reloadData();
 			WeaponsFile.reloadData();
 			PerksFile.reloadData();
+			AchievementsFile.reloadData();
 			ThisPlugin.getPlugin().reloadConfig();
 			
 			MainClan.setUp(ThisPlugin.getPlugin());

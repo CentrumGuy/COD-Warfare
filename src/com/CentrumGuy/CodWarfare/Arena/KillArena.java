@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.CentrumGuy.CodWarfare.Utilities.GetNormalName;
-import com.CentrumGuy.CodWarfare.Utilities.Prefix;
-import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
-import com.CentrumGuy.CodWarfare.Utilities.ShowPlayer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -29,8 +24,14 @@ import org.bukkit.potion.PotionEffectType;
 import com.CentrumGuy.CodWarfare.Main;
 import com.CentrumGuy.CodWarfare.Arena.BaseArena.ArenaType;
 import com.CentrumGuy.CodWarfare.Inventories.KitInventory;
+import com.CentrumGuy.CodWarfare.ParticleEffects.ParticleEffect;
+import com.CentrumGuy.CodWarfare.ParticleEffects.ParticleEffect.OrdinaryColor;
 import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
 import com.CentrumGuy.CodWarfare.Utilities.GameCountdown;
+import com.CentrumGuy.CodWarfare.Utilities.GetNormalName;
+import com.CentrumGuy.CodWarfare.Utilities.Prefix;
+import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
+import com.CentrumGuy.CodWarfare.Utilities.ShowPlayer;
 
 public class KillArena {
 
@@ -237,7 +238,7 @@ public class KillArena {
                                     p.sendMessage("");
                                     p.sendMessage("§e§m=====================================================");
                                     p.sendMessage("§b§lYou are playing a game of §4§lKill Confirmed!");
-                                    p.sendMessage(" §7§l- §6§lKill the §9§lBlue Team!");
+                                    p.sendMessage(" §7§l- §6§lCollect all of the tags (wool drops)");
                                     p.sendMessage(" §7§l- §6§lArena:§e§l " + Arena);
                                     p.sendMessage(" §7§l- §6§lGood luck!");
                                     p.sendMessage("§e§m=====================================================");
@@ -288,7 +289,7 @@ public class KillArena {
                                     p.sendMessage("");
                                     p.sendMessage("§e§m=====================================================");
                                     p.sendMessage("§b§lYou are playing a game of §4§lKill Confirmed!");
-                                    p.sendMessage(" §7§l- §6§lKill the §c§lRed Team!");
+                                    p.sendMessage(" §7§l- §6§lCollect all of the tags (wool drops)");
                                     p.sendMessage(" §7§l- §6§lArena:§e§l " + Arena);
                                     p.sendMessage(" §7§l- §6§lGood luck!");
                                     p.sendMessage("§e§m=====================================================");
@@ -348,7 +349,7 @@ public class KillArena {
                             p.sendMessage("");
                             p.sendMessage("§e§m=====================================================");
                             p.sendMessage("§b§lYou are playing a game of §4§lKill Confirmed!");
-                            p.sendMessage(" §7§l- §6§lKill the §9§lBlue Team!");
+                            p.sendMessage(" §7§l- §6§lCollect all of the tags (wool drops)");
                             p.sendMessage(" §7§l- §6§lArena:§e§l " + Arena);
                             p.sendMessage(" §7§l- §6§lGood luck!");
                             p.sendMessage("§e§m=====================================================");
@@ -391,7 +392,7 @@ public class KillArena {
                             p.sendMessage("");
                             p.sendMessage("§e§m=====================================================");
                             p.sendMessage("§b§lYou are playing a game of §4§lKill Confirmed!");
-                            p.sendMessage(" §7§l- §6§lKill the §c§lRed Team!");
+                            p.sendMessage(" §7§l- §6§lCollect all of the tags (wool drops)");
                             p.sendMessage(" §7§l- §6§lArena:§e§l " + Arena);
                             p.sendMessage(" §7§l- §6§lGood luck!");
                             p.sendMessage("§e§m=====================================================");
@@ -451,13 +452,13 @@ public class KillArena {
 
     private static String getBetterTeam() {
 		if (RedTeamScore > BlueTeamScore) {
-			String team = "§cRed§4(§c" + (RedTeamScore - BlueTeamScore) + "§4)";
+			String team = "§c§lRed: §4§l" + RedTeamScore + " " + "§r§9Blue: §1" + BlueTeamScore;
 			return team;
 		}else if (BlueTeamScore > RedTeamScore) {
-			String team = "§9Blue§1(§9" + (BlueTeamScore - RedTeamScore) + "§1)";
+			String team = "§9§lBlue: §1§l" + BlueTeamScore + " " + "§r§cRed: §4" + RedTeamScore;
 			return team;
 		}else{
-			String team = "§eTie(0)";
+			String team = "§e§lTie §6§l" + RedTeamScore + " §e§l- §6§l" + BlueTeamScore;
 			return team;
 		}
     }
@@ -486,25 +487,117 @@ public class KillArena {
     			if (BlueTeam.contains(p)) {
     				if (item.hasMetadata("codBlueTag")) {
     					e.setCancelled(true);
+    					
+    					Location loc = item.getLocation();
+    		        	OrdinaryColor c = new OrdinaryColor(20, 20, 200);
+    		        	for (int i = 0 ; i <= 10 ; i++) {
+    		        		Location loc2 = new Location(loc.getWorld(), loc.getX(), loc.getY() , loc.getZ());
+    		        		int pmX = new Random().nextInt(2);
+    		        		int pmY = new Random().nextInt(2);
+    		        		int pmZ = new Random().nextInt(2);
+    		        		
+    		        		double doubleX = 0.99999 * new Random().nextDouble();
+    		        		double doubleY = 0.99999 * new Random().nextDouble();
+    		        		double doubleZ = 0.99999 * new Random().nextDouble();
+    		        		
+    		        		if (pmX == 1) {
+    		        			loc2.setX(loc2.getX() + doubleX);
+    		        		}else{
+    		        			loc2.setX(loc2.getX() - doubleX);
+    		        		}
+    		        		
+    		        		if (pmY == 1) {
+    		        			loc2.setY(loc2.getY() + doubleY);
+    		        		}else{
+    		        			loc2.setY(loc2.getY() - doubleY);
+    		        		}
+    		        		
+    		        		if (pmZ == 1) {
+    		        			loc2.setZ(loc2.getZ() + doubleZ);
+    		        		}else{
+    		        			loc2.setZ(loc2.getZ() - doubleZ);
+    		        		}
+    		        		
+    		        		ParticleEffect.REDSTONE.display(c, loc);
+    		        	}
+    					
     					item.remove();
     					SendCoolMessages.sendTitle(p, "", 20, 40, 20);
     					SendCoolMessages.sendSubTitle(p, "§9§lKill Denied", 20, 40, 20);
     				}else if (item.hasMetadata("codRedTag")) {
     					e.setCancelled(true);
+    					
+    					Location loc = item.getLocation();
+    					ParticleEffect.REDSTONE.display((float) 0.1, (float) 0.1, (float) 0.1, 0, 10, loc);
+    					
     					item.remove();
     					SendCoolMessages.sendTitle(p, "", 20, 40, 20);
     					SendCoolMessages.sendSubTitle(p, "§c§lKill Confirmed", 20, 40, 20);
-    					BlueTeamScore = BlueTeamScore + 1;
+    					BlueTeamScore++;
+    					
+    					for (Player pp : Main.PlayingPlayers) {
+    						if (RedTeam.contains(pp)) {
+    	                        SendCoolMessages.TabHeaderAndFooter("§4§lRed §c§lTeam", "§6§lCOD-Warfare\n" + getBetterTeam(), pp);
+    						}else if (BlueTeam.contains(pp)) {
+    							SendCoolMessages.TabHeaderAndFooter("§1§lBlue §9§lTeam", "§6§lCOD-Warfare\n" + getBetterTeam(), pp);
+    						}
+    					}
     				}
     			}else if (RedTeam.contains(p)) {
     				if (item.hasMetadata("codBlueTag")) {
     					e.setCancelled(true);
+    					
+    					Location loc = item.getLocation();
+    		        	OrdinaryColor c = new OrdinaryColor(20, 20, 200);
+    		        	for (int i = 0 ; i <= 10 ; i++) {
+    		        		Location loc2 = new Location(loc.getWorld(), loc.getX(), loc.getY() , loc.getZ());
+    		        		int pmX = new Random().nextInt(2);
+    		        		int pmY = new Random().nextInt(2);
+    		        		int pmZ = new Random().nextInt(2);
+    		        		
+    		        		double doubleX = 0.99999 * new Random().nextDouble();
+    		        		double doubleY = 0.99999 * new Random().nextDouble();
+    		        		double doubleZ = 0.99999 * new Random().nextDouble();
+    		        		
+    		        		if (pmX == 1) {
+    		        			loc2.setX(loc2.getX() + doubleX);
+    		        		}else{
+    		        			loc2.setX(loc2.getX() - doubleX);
+    		        		}
+    		        		
+    		        		if (pmY == 1) {
+    		        			loc2.setY(loc2.getY() + doubleY);
+    		        		}else{
+    		        			loc2.setY(loc2.getY() - doubleY);
+    		        		}
+    		        		
+    		        		if (pmZ == 1) {
+    		        			loc2.setZ(loc2.getZ() + doubleZ);
+    		        		}else{
+    		        			loc2.setZ(loc2.getZ() - doubleZ);
+    		        		}
+    		        		
+    		        		ParticleEffect.REDSTONE.display(c, loc);
+    		        	}
+    					
     					item.remove();
     					SendCoolMessages.sendTitle(p, "", 20, 40, 20);
     					SendCoolMessages.sendSubTitle(p, "§9§lKill Confirmed", 20, 40, 20);
-    					RedTeamScore = RedTeamScore + 1;
+    					RedTeamScore++;
+    					
+    					for (Player pp : Main.PlayingPlayers) {
+    						if (RedTeam.contains(pp)) {
+    	                        SendCoolMessages.TabHeaderAndFooter("§4§lRed §c§lTeam", "§6§lCOD-Warfare\n" + getBetterTeam(), pp);
+    						}else if (BlueTeam.contains(pp)) {
+    							SendCoolMessages.TabHeaderAndFooter("§1§lBlue §9§lTeam", "§6§lCOD-Warfare\n" + getBetterTeam(), pp);
+    						}
+    					}
     				}else if (item.hasMetadata("codRedTag")) {
     					e.setCancelled(true);
+    					
+    					Location loc = item.getLocation();
+    					ParticleEffect.REDSTONE.display((float) 0.1, (float) 0.1, (float) 0.1, 0, 10, loc);
+    					
     					item.remove();
     					SendCoolMessages.sendTitle(p, "", 20, 40, 20);
     					SendCoolMessages.sendSubTitle(p, "§c§lKill Denied", 20, 40, 20);
@@ -620,14 +713,14 @@ public class KillArena {
     		}
     	}
     	
-        if (BlueTeamScore > RedTeamScore) {
+    	if (BlueTeamScore > RedTeamScore) {
             for (Player pp : Main.PlayingPlayers) {
                 pp.sendMessage("");
                 pp.sendMessage("");
                 pp.sendMessage("");
                 pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
                 pp.sendMessage("§7║");
-                pp.sendMessage("§7║ §7§lWinner: §9§lBlue Team(" + (BlueTeamScore - RedTeamScore) + ")             §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                pp.sendMessage("§7║ §7§lWinner: §9§lBlue: §1§l" + BlueTeamScore + " " + "§r§cRed: §4" + RedTeamScore + "         §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
 
                 DecimalFormat df = new DecimalFormat("#.##");
 
@@ -635,9 +728,9 @@ public class KillArena {
 
                 if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-                } else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
+                }else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-                } else {
+                }else{
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
                 }
 
@@ -648,14 +741,14 @@ public class KillArena {
             for (Player pp : Main.WaitingPlayers) {
                 pp.sendMessage(Main.codSignature + "§bBlue §9team won!");
             }
-        } else if (RedTeamScore > BlueTeamScore) {
+        }else if (RedTeamScore > BlueTeamScore) {
             for (Player pp : Main.PlayingPlayers) {
                 pp.sendMessage("");
                 pp.sendMessage("");
                 pp.sendMessage("");
                 pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
                 pp.sendMessage("§7║");
-                pp.sendMessage("§7║ §7§lWinner: §c§lRed Team(" + (RedTeamScore - BlueTeamScore) + ")             §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                pp.sendMessage("§7║ §7§lWinner: §c§lRed: §4§l" + RedTeamScore + " " + "§r§9Blue: §1" + BlueTeamScore + "         §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
 
                 DecimalFormat df = new DecimalFormat("#.##");
 
@@ -663,9 +756,9 @@ public class KillArena {
 
                 if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-                } else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
+                }else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-                } else {
+                }else{
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
                 }
 
@@ -676,14 +769,14 @@ public class KillArena {
             for (Player pp : Main.WaitingPlayers) {
                 pp.sendMessage(Main.codSignature + "§4Red §cteam won!");
             }
-        } else {
+        }else{
             for (Player pp : Main.PlayingPlayers) {
                 pp.sendMessage("");
                 pp.sendMessage("");
                 pp.sendMessage("");
                 pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
                 pp.sendMessage("§7║");
-                pp.sendMessage("§7║ §7§lWinner: §6§lTIE(0)             §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                pp.sendMessage("§7║ §7§lWinner: §e§lTie! §6§l" + RedTeamScore + " §e§l- §6§l" + BlueTeamScore + "         §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
 
                 DecimalFormat df = new DecimalFormat("#.##");
 
@@ -691,9 +784,9 @@ public class KillArena {
 
                 if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-                } else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
+                }else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-                } else {
+                }else{
                     pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
                 }
 

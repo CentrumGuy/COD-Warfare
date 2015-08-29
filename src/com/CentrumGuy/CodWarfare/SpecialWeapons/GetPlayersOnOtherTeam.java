@@ -14,6 +14,7 @@ import com.CentrumGuy.CodWarfare.Arena.TDMArena;
 public class GetPlayersOnOtherTeam {
 
 	public static ArrayList<Player> get(Player p) {
+		if (Main.WaitingPlayers.contains(p)) return new ArrayList<Player>();
 		if (BaseArena.type == BaseArena.ArenaType.TDM) {
 			if (TDMArena.RedTeam.contains(p)) {
 				return TDMArena.BlueTeam;
@@ -45,6 +46,6 @@ public class GetPlayersOnOtherTeam {
 			return players;
 		}
 		
-		return null;
+		return new ArrayList<Player>();
 	}
 }

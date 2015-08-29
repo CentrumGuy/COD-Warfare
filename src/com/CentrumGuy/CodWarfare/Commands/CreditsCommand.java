@@ -1,6 +1,7 @@
 package com.CentrumGuy.CodWarfare.Commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.CentrumGuy.CodWarfare.Main;
@@ -9,7 +10,7 @@ import com.CentrumGuy.CodWarfare.Interface.Scores;
 public class CreditsCommand {
 
 	@SuppressWarnings("deprecation")
-	public static void addCredits(Player p, String[] args) {
+	public static void addCredits(CommandSender p, String[] args) {
 		if (!(p.hasPermission("cod.creditsAdd"))) {
 			p.sendMessage(Main.codSignature + "§cYou do not have the necessary permissions");
 			return;
@@ -46,7 +47,7 @@ public class CreditsCommand {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void takeCredits(Player p, String[] args) {
+	public static void takeCredits(CommandSender p, String[] args) {
 		if (!(p.hasPermission("cod.creditsTake"))) {
 			p.sendMessage(Main.codSignature + "§cYou do not have the necessary permissions");
 			return;
@@ -83,7 +84,7 @@ public class CreditsCommand {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void setCredits(Player p, String[] args) {
+	public static void setCredits(CommandSender p, String[] args) {
 		if (!(p.hasPermission("cod.creditsSet"))) {
 			p.sendMessage(Main.codSignature + "§cYou do not have the necessary permissions");
 			return;

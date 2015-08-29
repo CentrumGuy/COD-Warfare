@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.CentrumGuy.CodWarfare.Utilities.GetNormalName;
-import com.CentrumGuy.CodWarfare.Utilities.Prefix;
-import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
-import com.CentrumGuy.CodWarfare.Utilities.ShowPlayer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -25,6 +20,10 @@ import com.CentrumGuy.CodWarfare.Arena.BaseArena.ArenaType;
 import com.CentrumGuy.CodWarfare.Inventories.KitInventory;
 import com.CentrumGuy.CodWarfare.Plugin.ThisPlugin;
 import com.CentrumGuy.CodWarfare.Utilities.GameCountdown;
+import com.CentrumGuy.CodWarfare.Utilities.GetNormalName;
+import com.CentrumGuy.CodWarfare.Utilities.Prefix;
+import com.CentrumGuy.CodWarfare.Utilities.SendCoolMessages;
+import com.CentrumGuy.CodWarfare.Utilities.ShowPlayer;
 
 public class TDMArena {
 	
@@ -438,18 +437,18 @@ public class TDMArena {
 		}
 	}
 	
-	private static String getBetterTeam() {
+    private static String getBetterTeam() {
 		if (RedTeamScore > BlueTeamScore) {
-			String team = "§cRed§4(§c" + (RedTeamScore - BlueTeamScore) + "§4)";
+			String team = "§c§lRed: §4§l" + RedTeamScore + " " + "§r§9Blue: §1" + BlueTeamScore;
 			return team;
 		}else if (BlueTeamScore > RedTeamScore) {
-			String team = "§9Blue§1(§9" + (BlueTeamScore - RedTeamScore) + "§1)";
+			String team = "§9§lBlue: §1§l" + BlueTeamScore + " " + "§r§cRed: §4" + RedTeamScore;
 			return team;
 		}else{
-			String team = "§eTie(0)";
+			String team = "§e§lTie §6§l" + RedTeamScore + " §e§l- §6§l" + BlueTeamScore;
 			return team;
 		}
-	}
+    }
 	
 	public static void changeScore(Player p) {
 		if (RedTeam.contains(p)) {
@@ -566,89 +565,89 @@ public class TDMArena {
 	
 	public static void endTDM() {
 		if (BlueTeamScore > RedTeamScore) {
-			for (Player pp : Main.PlayingPlayers) {
-				pp.sendMessage("");
-				pp.sendMessage("");
-				pp.sendMessage("");
-				pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
-				pp.sendMessage("§7║");
-				pp.sendMessage("§7║ §7§lWinner: §9§lBlue Team(" + (BlueTeamScore - RedTeamScore) + ")             §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				
-				DecimalFormat df = new DecimalFormat("#.##");
-				
-				float kdr = ((float) Main.GameKillsScore.get(pp.getName()).getScore()) / ((float) Main.GameDeathsScore.get(pp.getName()).getScore());
-				
-				if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				}else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				}else{
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
-				}
-				
-				pp.sendMessage("§7║");
-				pp.sendMessage("§7╚§7§l════════════════════════════");
-			}
-			
-			for (Player pp : Main.WaitingPlayers) {
-				pp.sendMessage(Main.codSignature + "§bBlue §9team won!");
-			}
-		}else if (RedTeamScore > BlueTeamScore) {
-			for (Player pp : Main.PlayingPlayers) {
-				pp.sendMessage("");
-				pp.sendMessage("");
-				pp.sendMessage("");
-				pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
-				pp.sendMessage("§7║");
-				pp.sendMessage("§7║ §7§lWinner: §c§lRed Team(" + (RedTeamScore - BlueTeamScore) + ")             §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				
-				DecimalFormat df = new DecimalFormat("#.##");
-				
-				float kdr = ((float) Main.GameKillsScore.get(pp.getName()).getScore()) / ((float) Main.GameDeathsScore.get(pp.getName()).getScore());
-				
-				if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				}else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				}else{
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
-				}
-				
-				pp.sendMessage("§7║");
-				pp.sendMessage("§7╚§7§l════════════════════════════");
-			}
-			
-			for (Player pp : Main.WaitingPlayers) {
-				pp.sendMessage(Main.codSignature + "§4Red §cteam won!");
-			}
-		}else{
-			for (Player pp : Main.PlayingPlayers) {
-				pp.sendMessage("");
-				pp.sendMessage("");
-				pp.sendMessage("");
-				pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
-				pp.sendMessage("§7║");
-				pp.sendMessage("§7║ §7§lWinner: §6§lTIE(0)             §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				
-				DecimalFormat df = new DecimalFormat("#.##");
-				
-				float kdr = ((float) Main.GameKillsScore.get(pp.getName()).getScore()) / ((float) Main.GameDeathsScore.get(pp.getName()).getScore());
-				
-				if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				}else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
-				}else{
-					pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
-				}
-				
-				pp.sendMessage("§7║");
-				pp.sendMessage("§7╚§7§l════════════════════════════");
-			}
-			
-			for (Player pp : Main.WaitingPlayers) {
-				pp.sendMessage(Main.codSignature + "§eTie! §6Nobody won");
-			}
-		}
+            for (Player pp : Main.PlayingPlayers) {
+                pp.sendMessage("");
+                pp.sendMessage("");
+                pp.sendMessage("");
+                pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
+                pp.sendMessage("§7║");
+                pp.sendMessage("§7║ §7§lWinner: §9§lBlue: §1§l" + BlueTeamScore + " " + "§r§cRed: §4" + RedTeamScore + "         §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+
+                DecimalFormat df = new DecimalFormat("#.##");
+
+                float kdr = ((float) Main.GameKillsScore.get(pp.getName()).getScore()) / ((float) Main.GameDeathsScore.get(pp.getName()).getScore());
+
+                if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                }else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                }else{
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
+                }
+
+                pp.sendMessage("§7║");
+                pp.sendMessage("§7╚§7§l════════════════════════════");
+            }
+
+            for (Player pp : Main.WaitingPlayers) {
+                pp.sendMessage(Main.codSignature + "§bBlue §9team won!");
+            }
+        }else if (RedTeamScore > BlueTeamScore) {
+            for (Player pp : Main.PlayingPlayers) {
+                pp.sendMessage("");
+                pp.sendMessage("");
+                pp.sendMessage("");
+                pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
+                pp.sendMessage("§7║");
+                pp.sendMessage("§7║ §7§lWinner: §c§lRed: §4§l" + RedTeamScore + " " + "§r§9Blue: §1" + BlueTeamScore + "         §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+
+                DecimalFormat df = new DecimalFormat("#.##");
+
+                float kdr = ((float) Main.GameKillsScore.get(pp.getName()).getScore()) / ((float) Main.GameDeathsScore.get(pp.getName()).getScore());
+
+                if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                }else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                }else{
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
+                }
+
+                pp.sendMessage("§7║");
+                pp.sendMessage("§7╚§7§l════════════════════════════");
+            }
+
+            for (Player pp : Main.WaitingPlayers) {
+                pp.sendMessage(Main.codSignature + "§4Red §cteam won!");
+            }
+        }else{
+            for (Player pp : Main.PlayingPlayers) {
+                pp.sendMessage("");
+                pp.sendMessage("");
+                pp.sendMessage("");
+                pp.sendMessage("§7║ §b§lStatistics:§6§l " + PickRandomArena.CurrentArena);
+                pp.sendMessage("§7║");
+                pp.sendMessage("§7║ §7§lWinner: §e§lTie! §6§l" + RedTeamScore + " §e§l- §6§l" + BlueTeamScore + "         §b§lTotal Kills:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+
+                DecimalFormat df = new DecimalFormat("#.##");
+
+                float kdr = ((float) Main.GameKillsScore.get(pp.getName()).getScore()) / ((float) Main.GameDeathsScore.get(pp.getName()).getScore());
+
+                if (Main.GameDeathsScore.get(pp.getName()).getScore() == 0) {
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                }else if (Main.GameKillsScore.get(pp.getName()).getScore() == 0) {
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + Main.GameKillsScore.get(pp.getName()).getScore());
+                }else{
+                    pp.sendMessage("§7║" + " §b§lTotal Deaths:§a§l " + Main.GameDeathsScore.get(pp.getName()).getScore() + "       §b§lKDR:§a§l " + df.format(kdr));
+                }
+
+                pp.sendMessage("§7║");
+                pp.sendMessage("§7╚§7§l════════════════════════════");
+            }
+
+            for (Player pp : Main.WaitingPlayers) {
+                pp.sendMessage(Main.codSignature + "§eTie! §6Nobody won");
+            }
+        }
 	}
 }

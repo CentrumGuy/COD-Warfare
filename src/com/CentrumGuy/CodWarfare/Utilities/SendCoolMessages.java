@@ -9,9 +9,6 @@ package com.CentrumGuy.CodWarfare.Utilities;
 
 import java.lang.reflect.InvocationTargetException;
 
-
-
-
 //import org.bukkit.ChatColor;
 //import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;

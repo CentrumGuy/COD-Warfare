@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.CentrumGuy.CodWarfare.Main;
+import com.CentrumGuy.CodWarfare.Achievements.AchievementsAPI;
 import com.CentrumGuy.CodWarfare.Interface.ItemsAndInventories;
 import com.CentrumGuy.CodWarfare.Interface.Scores;
 import com.CentrumGuy.CodWarfare.Inventories.AGPInventory;
@@ -117,6 +118,8 @@ public class Level {
 		ItemsAndInventories.setUpPlayer(p);
 		ItemsAndInventories.setAvailableGuns(p);
 		ItemsAndInventories.updateShop(p);
+		
+		AchievementsAPI.unlockReadyForBattle(p);
 	}
 	
 	public static int getLevel(Player p) {

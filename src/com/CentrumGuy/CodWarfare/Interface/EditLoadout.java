@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.CentrumGuy.CodWarfare.Main;
+import com.CentrumGuy.CodWarfare.Achievements.AchievementsAPI;
 import com.CentrumGuy.CodWarfare.Inventories.AGPInventory;
 import com.CentrumGuy.CodWarfare.Inventories.AGSInventory;
 import com.CentrumGuy.CodWarfare.Inventories.Guns;
@@ -18,6 +19,7 @@ import com.CentrumGuy.CodWarfare.Inventories.ShopInventorySecondary;
 import com.CentrumGuy.CodWarfare.OtherLoadout.Lethal;
 import com.CentrumGuy.CodWarfare.OtherLoadout.Tactical;
 import com.CentrumGuy.CodWarfare.Utilities.GetNormalName;
+import com.CentrumGuy.CodWarfare.Utilities.weaponItems;
 
 public class EditLoadout {
 
@@ -78,6 +80,8 @@ public class EditLoadout {
 					
 					p.sendMessage(Main.codSignature + "§6Succesfully purchased:§e " + gun.getItemMeta().getDisplayName());
 					
+					AchievementsAPI.unlockTimeToUpgrade(p);
+					
 					return;
 				}else if (Guns.getType(gun).equalsIgnoreCase("Secondary")) {
 					for (int i = 0 ; i < ShopInventorySecondary.getSecondaryShop(p).getSize() ; i++) {
@@ -96,6 +100,8 @@ public class EditLoadout {
 					ItemsAndInventories.updateShop(p);
 					
 					p.sendMessage(Main.codSignature + "§6Succesfully purchased:§e " + gun.getItemMeta().getDisplayName());
+					
+					AchievementsAPI.unlockTimeToUpgrade(p);
 					
 					return;
 				}else{
@@ -202,10 +208,10 @@ public class EditLoadout {
 				
 				ItemsAndInventories.ClassSelection.get(p).setItem(33, tChanged);
 				
-				if (!(Main.CrackShot)) {
-					KitInventory.getKit(p).setItem(6, item);
-				}else{
+				if ((Main.CrackShot) && (!(weaponItems.sameID(item.getType())))) {
 					KitInventory.getKit(p).setItem(6, Main.CrackShotAPI.generateWeapon(GetNormalName.get(item.getItemMeta().getDisplayName())));
+				}else{
+					KitInventory.getKit(p).setItem(6, item);
 				}
 				
 				if (Tactical.getCost(item) != 0) {
@@ -236,10 +242,10 @@ public class EditLoadout {
 				
 				ItemsAndInventories.ClassSelection.get(p).setItem(31, lChanged);
 				
-				if (!(Main.CrackShot)) {
-					KitInventory.getKit(p).setItem(5, item);
-				}else{
+				if ((Main.CrackShot) && (!(weaponItems.sameID(item.getType())))) {
 					KitInventory.getKit(p).setItem(5, Main.CrackShotAPI.generateWeapon(GetNormalName.get(item.getItemMeta().getDisplayName())));
+				}else{
+					KitInventory.getKit(p).setItem(5, item);
 				}
 				
 				if (Lethal.getCost(item) != 0) {

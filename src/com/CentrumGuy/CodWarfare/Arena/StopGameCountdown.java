@@ -1,5 +1,8 @@
 package com.CentrumGuy.CodWarfare.Arena;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,7 +24,7 @@ public class StopGameCountdown {
 		BaseArena.state = BaseArena.ArenaState.ENDING;
 			for (Player pp : Main.PlayingPlayers) {
 				SendCoolMessages.sendTitle(pp, "§6§lGAME OVER!", 10, 20, 10);
-			    SendCoolMessages.sendSubTitle(pp, "§d§lSarting New Game...", 10, 20, 10);
+			    SendCoolMessages.sendSubTitle(pp, "§d§lStarting New Game...", 10, 20, 10);
 		    	if (!(GameVersion.above47(pp))) {
 		    		pp.sendMessage(Main.codSignature + "§6§lGAME OVER!");
 		    		pp.sendMessage(Main.codSignature + "§d§lStarting New Game...");
@@ -35,7 +38,7 @@ public class StopGameCountdown {
 	    		Player wp = Main.WaitingPlayers.get(i);
 	    		
 	    		SendCoolMessages.sendTitle(wp, "§6§lGAME OVER!", 10, 20, 10);
-			    SendCoolMessages.sendSubTitle(wp, "§d§lSarting New Game...", 10, 20, 10);
+			    SendCoolMessages.sendSubTitle(wp, "§d§lStarting New Game...", 10, 20, 10);
 		    	if (!(GameVersion.above47(wp))) {
 		    		wp.sendMessage(Main.codSignature + "§6§lGAME OVER!");
 		    		wp.sendMessage(Main.codSignature + "§d§lStarting New Game...");
@@ -45,6 +48,12 @@ public class StopGameCountdown {
 	    	for (Player pp : Main.PlayingPlayers) {
 	    		if ((!(getArena.getType(PickRandomArena.CurrentArena).equalsIgnoreCase("ONEIN"))) && (!(getArena.getType(PickRandomArena.CurrentArena).equalsIgnoreCase("GUN")))) {
 	    			WeaponUtils.clearWeapons(pp);
+	    		}
+	    	}
+	    	
+	    	for (World w : Bukkit.getServer().getWorlds()) {
+	    		for (Entity e : w.getEntities()) {
+	    			if (e.hasMetadata("codAllowHit")) e.remove();
 	    		}
 	    	}
 	    	
